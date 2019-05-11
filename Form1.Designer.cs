@@ -41,12 +41,17 @@
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.button2 = new System.Windows.Forms.Button();
             this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.button9 = new System.Windows.Forms.Button();
+            this.textBox2 = new System.Windows.Forms.TextBox();
+            this.button3 = new System.Windows.Forms.Button();
             this.tabPage5 = new System.Windows.Forms.TabPage();
             this.label9 = new System.Windows.Forms.Label();
             this.button5 = new System.Windows.Forms.Button();
             this.label5 = new System.Windows.Forms.Label();
             this.textBox3 = new System.Windows.Forms.TextBox();
             this.button4 = new System.Windows.Forms.Button();
+            this.Tn = new AxTINYLib.AxTiny();
+            this.axTinyPlusCtrl1 = new AxTINYLib.AxTinyPlusCtrl();
             this.label8 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
@@ -58,28 +63,27 @@
             this.button6 = new System.Windows.Forms.Button();
             this.TinyCode = new System.Windows.Forms.TextBox();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.label10 = new System.Windows.Forms.Label();
-            this.button8 = new System.Windows.Forms.Button();
-            this.panel2 = new System.Windows.Forms.Panel();
-            this.button3 = new System.Windows.Forms.Button();
-            this.textBox2 = new System.Windows.Forms.TextBox();
-            this.button9 = new System.Windows.Forms.Button();
-            this.button10 = new System.Windows.Forms.Button();
-            this.textBox4 = new System.Windows.Forms.TextBox();
-            this.label4 = new System.Windows.Forms.Label();
             this.label11 = new System.Windows.Forms.Label();
-            this.Tn = new AxTINYLib.AxTiny();
-            this.axTinyPlusCtrl1 = new AxTINYLib.AxTinyPlusCtrl();
+            this.label4 = new System.Windows.Forms.Label();
+            this.label10 = new System.Windows.Forms.Label();
+            this.textBox4 = new System.Windows.Forms.TextBox();
+            this.button8 = new System.Windows.Forms.Button();
+            this.button10 = new System.Windows.Forms.Button();
+            this.panel2 = new System.Windows.Forms.Panel();
+            this.label12 = new System.Windows.Forms.Label();
+            this.label13 = new System.Windows.Forms.Label();
+            this.textBox5 = new System.Windows.Forms.TextBox();
+            this.button11 = new System.Windows.Forms.Button();
             this.SecTab.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.tabPage3.SuspendLayout();
             this.tabPage5.SuspendLayout();
-            this.panel1.SuspendLayout();
-            this.panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Tn)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.axTinyPlusCtrl1)).BeginInit();
+            this.panel1.SuspendLayout();
+            this.panel2.SuspendLayout();
             this.SuspendLayout();
             // 
             // button1
@@ -106,6 +110,10 @@
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.label13);
+            this.tabPage1.Controls.Add(this.textBox5);
+            this.tabPage1.Controls.Add(this.button11);
+            this.tabPage1.Controls.Add(this.label12);
             this.tabPage1.Controls.Add(this.button7);
             this.tabPage1.Location = new System.Drawing.Point(4, 25);
             this.tabPage1.Name = "tabPage1";
@@ -117,7 +125,7 @@
             // 
             // button7
             // 
-            this.button7.Location = new System.Drawing.Point(322, 121);
+            this.button7.Location = new System.Drawing.Point(324, 189);
             this.button7.Name = "button7";
             this.button7.Size = new System.Drawing.Size(205, 101);
             this.button7.TabIndex = 0;
@@ -210,6 +218,33 @@
             this.tabPage3.Text = "RestoreCertificate";
             this.tabPage3.UseVisualStyleBackColor = true;
             // 
+            // button9
+            // 
+            this.button9.Location = new System.Drawing.Point(307, 195);
+            this.button9.Name = "button9";
+            this.button9.Size = new System.Drawing.Size(135, 51);
+            this.button9.TabIndex = 2;
+            this.button9.Text = "Restore";
+            this.button9.UseVisualStyleBackColor = true;
+            // 
+            // textBox2
+            // 
+            this.textBox2.Location = new System.Drawing.Point(143, 92);
+            this.textBox2.Name = "textBox2";
+            this.textBox2.Size = new System.Drawing.Size(418, 22);
+            this.textBox2.TabIndex = 1;
+            this.textBox2.TextChanged += new System.EventHandler(this.TextBox2_TextChanged);
+            // 
+            // button3
+            // 
+            this.button3.Location = new System.Drawing.Point(567, 87);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(84, 32);
+            this.button3.TabIndex = 0;
+            this.button3.Text = "Browse";
+            this.button3.UseVisualStyleBackColor = true;
+            this.button3.Click += new System.EventHandler(this.Button3_Click_1);
+            // 
             // tabPage5
             // 
             this.tabPage5.Controls.Add(this.label9);
@@ -272,6 +307,26 @@
             this.button4.TabIndex = 7;
             this.button4.Text = "Browse";
             this.button4.UseVisualStyleBackColor = true;
+            // 
+            // Tn
+            // 
+            this.Tn.Enabled = true;
+            this.Tn.Location = new System.Drawing.Point(12, 221);
+            this.Tn.Name = "Tn";
+            this.Tn.OcxState = ((System.Windows.Forms.AxHost.State)(resources.GetObject("Tn.OcxState")));
+            this.Tn.Size = new System.Drawing.Size(117, 50);
+            this.Tn.TabIndex = 18;
+            this.Tn.Visible = false;
+            // 
+            // axTinyPlusCtrl1
+            // 
+            this.axTinyPlusCtrl1.Enabled = true;
+            this.axTinyPlusCtrl1.Location = new System.Drawing.Point(12, 358);
+            this.axTinyPlusCtrl1.Name = "axTinyPlusCtrl1";
+            this.axTinyPlusCtrl1.OcxState = ((System.Windows.Forms.AxHost.State)(resources.GetObject("axTinyPlusCtrl1.OcxState")));
+            this.axTinyPlusCtrl1.Size = new System.Drawing.Size(240, 240);
+            this.axTinyPlusCtrl1.TabIndex = 17;
+            this.axTinyPlusCtrl1.Visible = false;
             // 
             // label8
             // 
@@ -370,93 +425,6 @@
             this.panel1.Size = new System.Drawing.Size(861, 135);
             this.panel1.TabIndex = 17;
             // 
-            // label10
-            // 
-            this.label10.AutoSize = true;
-            this.label10.BackColor = System.Drawing.SystemColors.ButtonFace;
-            this.label10.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label10.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
-            this.label10.Location = new System.Drawing.Point(345, 38);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(61, 17);
-            this.label10.TabIndex = 18;
-            this.label10.Text = "label10";
-            // 
-            // button8
-            // 
-            this.button8.Location = new System.Drawing.Point(348, 70);
-            this.button8.Name = "button8";
-            this.button8.Size = new System.Drawing.Size(132, 49);
-            this.button8.TabIndex = 17;
-            this.button8.Text = "Test Connection";
-            this.button8.UseVisualStyleBackColor = true;
-            this.button8.Click += new System.EventHandler(this.Button8_Click);
-            // 
-            // panel2
-            // 
-            this.panel2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panel2.Controls.Add(this.button6);
-            this.panel2.Controls.Add(this.TinyCode);
-            this.panel2.Location = new System.Drawing.Point(27, 6);
-            this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(861, 81);
-            this.panel2.TabIndex = 18;
-            // 
-            // button3
-            // 
-            this.button3.Location = new System.Drawing.Point(567, 87);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(84, 32);
-            this.button3.TabIndex = 0;
-            this.button3.Text = "Browse";
-            this.button3.UseVisualStyleBackColor = true;
-            this.button3.Click += new System.EventHandler(this.Button3_Click_1);
-            // 
-            // textBox2
-            // 
-            this.textBox2.Location = new System.Drawing.Point(143, 92);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(418, 22);
-            this.textBox2.TabIndex = 1;
-            this.textBox2.TextChanged += new System.EventHandler(this.TextBox2_TextChanged);
-            // 
-            // button9
-            // 
-            this.button9.Location = new System.Drawing.Point(307, 195);
-            this.button9.Name = "button9";
-            this.button9.Size = new System.Drawing.Size(135, 51);
-            this.button9.TabIndex = 2;
-            this.button9.Text = "Restore";
-            this.button9.UseVisualStyleBackColor = true;
-            // 
-            // button10
-            // 
-            this.button10.Location = new System.Drawing.Point(550, 72);
-            this.button10.Name = "button10";
-            this.button10.Size = new System.Drawing.Size(104, 47);
-            this.button10.TabIndex = 1;
-            this.button10.Text = "Change Sa Password";
-            this.button10.UseVisualStyleBackColor = true;
-            this.button10.Click += new System.EventHandler(this.Button10_Click);
-            // 
-            // textBox4
-            // 
-            this.textBox4.BackColor = System.Drawing.SystemColors.Window;
-            this.textBox4.Location = new System.Drawing.Point(660, 92);
-            this.textBox4.Name = "textBox4";
-            this.textBox4.PasswordChar = '*';
-            this.textBox4.Size = new System.Drawing.Size(173, 22);
-            this.textBox4.TabIndex = 4;
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(660, 70);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(120, 17);
-            this.label4.TabIndex = 19;
-            this.label4.Text = "Current Password";
-            // 
             // label11
             // 
             this.label11.AutoSize = true;
@@ -469,25 +437,104 @@
             this.label11.Text = "label11";
             this.label11.Click += new System.EventHandler(this.Label11_Click);
             // 
-            // Tn
+            // label4
             // 
-            this.Tn.Enabled = true;
-            this.Tn.Location = new System.Drawing.Point(12, 221);
-            this.Tn.Name = "Tn";
-            this.Tn.OcxState = ((System.Windows.Forms.AxHost.State)(resources.GetObject("Tn.OcxState")));
-            this.Tn.Size = new System.Drawing.Size(117, 50);
-            this.Tn.TabIndex = 18;
-            this.Tn.Visible = false;
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(660, 70);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(120, 17);
+            this.label4.TabIndex = 19;
+            this.label4.Text = "Current Password";
             // 
-            // axTinyPlusCtrl1
+            // label10
             // 
-            this.axTinyPlusCtrl1.Enabled = true;
-            this.axTinyPlusCtrl1.Location = new System.Drawing.Point(12, 358);
-            this.axTinyPlusCtrl1.Name = "axTinyPlusCtrl1";
-            this.axTinyPlusCtrl1.OcxState = ((System.Windows.Forms.AxHost.State)(resources.GetObject("axTinyPlusCtrl1.OcxState")));
-            this.axTinyPlusCtrl1.Size = new System.Drawing.Size(240, 240);
-            this.axTinyPlusCtrl1.TabIndex = 17;
-            this.axTinyPlusCtrl1.Visible = false;
+            this.label10.AutoSize = true;
+            this.label10.BackColor = System.Drawing.SystemColors.ButtonFace;
+            this.label10.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label10.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
+            this.label10.Location = new System.Drawing.Point(345, 38);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(61, 17);
+            this.label10.TabIndex = 18;
+            this.label10.Text = "label10";
+            // 
+            // textBox4
+            // 
+            this.textBox4.BackColor = System.Drawing.SystemColors.Window;
+            this.textBox4.Location = new System.Drawing.Point(660, 92);
+            this.textBox4.Name = "textBox4";
+            this.textBox4.PasswordChar = '*';
+            this.textBox4.Size = new System.Drawing.Size(173, 22);
+            this.textBox4.TabIndex = 4;
+            // 
+            // button8
+            // 
+            this.button8.Location = new System.Drawing.Point(348, 70);
+            this.button8.Name = "button8";
+            this.button8.Size = new System.Drawing.Size(132, 49);
+            this.button8.TabIndex = 17;
+            this.button8.Text = "Test Connection";
+            this.button8.UseVisualStyleBackColor = true;
+            this.button8.Click += new System.EventHandler(this.Button8_Click);
+            // 
+            // button10
+            // 
+            this.button10.Location = new System.Drawing.Point(550, 72);
+            this.button10.Name = "button10";
+            this.button10.Size = new System.Drawing.Size(104, 47);
+            this.button10.TabIndex = 1;
+            this.button10.Text = "Change Sa Password";
+            this.button10.UseVisualStyleBackColor = true;
+            this.button10.Click += new System.EventHandler(this.Button10_Click);
+            // 
+            // panel2
+            // 
+            this.panel2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel2.Controls.Add(this.button6);
+            this.panel2.Controls.Add(this.TinyCode);
+            this.panel2.Location = new System.Drawing.Point(27, 6);
+            this.panel2.Name = "panel2";
+            this.panel2.Size = new System.Drawing.Size(861, 81);
+            this.panel2.TabIndex = 18;
+            // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.BackColor = System.Drawing.SystemColors.ButtonFace;
+            this.label12.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label12.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
+            this.label12.Location = new System.Drawing.Point(387, 160);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(61, 17);
+            this.label12.TabIndex = 19;
+            this.label12.Text = "label12";
+            // 
+            // label13
+            // 
+            this.label13.AutoSize = true;
+            this.label13.Location = new System.Drawing.Point(338, 69);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(171, 17);
+            this.label13.TabIndex = 22;
+            this.label13.Text = "یک مسیر را برای کپی انتخاب نمایید.";
+            // 
+            // textBox5
+            // 
+            this.textBox5.Location = new System.Drawing.Point(66, 121);
+            this.textBox5.Name = "textBox5";
+            this.textBox5.Size = new System.Drawing.Size(578, 22);
+            this.textBox5.TabIndex = 21;
+            this.textBox5.Text = "D:\\SqlBackup";
+            // 
+            // button11
+            // 
+            this.button11.Location = new System.Drawing.Point(650, 119);
+            this.button11.Name = "button11";
+            this.button11.Size = new System.Drawing.Size(114, 27);
+            this.button11.TabIndex = 20;
+            this.button11.Text = "Browse";
+            this.button11.UseVisualStyleBackColor = true;
+            this.button11.Click += new System.EventHandler(this.Button11_Click);
             // 
             // Form1
             // 
@@ -502,6 +549,7 @@
             this.Load += new System.EventHandler(this.Form1_Load);
             this.SecTab.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
+            this.tabPage1.PerformLayout();
             this.tabPage2.ResumeLayout(false);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
@@ -509,12 +557,12 @@
             this.tabPage3.PerformLayout();
             this.tabPage5.ResumeLayout(false);
             this.tabPage5.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.Tn)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.axTinyPlusCtrl1)).EndInit();
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             this.panel2.ResumeLayout(false);
             this.panel2.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.Tn)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.axTinyPlusCtrl1)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -562,6 +610,10 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.TextBox textBox4;
         private System.Windows.Forms.Label label11;
+        private System.Windows.Forms.Label label12;
+        private System.Windows.Forms.Label label13;
+        private System.Windows.Forms.TextBox textBox5;
+        private System.Windows.Forms.Button button11;
     }
 }
 
