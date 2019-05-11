@@ -86,6 +86,9 @@
             this.label7 = new System.Windows.Forms.Label();
             this.textBox9 = new System.Windows.Forms.TextBox();
             this.label18 = new System.Windows.Forms.Label();
+            this.label19 = new System.Windows.Forms.Label();
+            this.label20 = new System.Windows.Forms.Label();
+            this.label21 = new System.Windows.Forms.Label();
             this.SecTab.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
@@ -434,6 +437,9 @@
             // 
             // tabPage5
             // 
+            this.tabPage5.Controls.Add(this.label21);
+            this.tabPage5.Controls.Add(this.label20);
+            this.tabPage5.Controls.Add(this.label19);
             this.tabPage5.Controls.Add(this.label18);
             this.tabPage5.Controls.Add(this.textBox9);
             this.tabPage5.Controls.Add(this.label9);
@@ -467,7 +473,7 @@
             this.button5.Location = new System.Drawing.Point(206, 149);
             this.button5.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.button5.Name = "button5";
-            this.button5.Size = new System.Drawing.Size(159, 72);
+            this.button5.Size = new System.Drawing.Size(159, 58);
             this.button5.TabIndex = 10;
             this.button5.Text = "Encrypt";
             this.button5.UseVisualStyleBackColor = false;
@@ -727,6 +733,42 @@
             this.label18.TabIndex = 21;
             this.label18.Text = "آدرس سرور تاینی را وارد نمایید";
             // 
+            // label19
+            // 
+            this.label19.AutoSize = true;
+            this.label19.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label19.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
+            this.label19.Location = new System.Drawing.Point(138, 159);
+            this.label19.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label19.Name = "label19";
+            this.label19.Size = new System.Drawing.Size(48, 13);
+            this.label19.TabIndex = 22;
+            this.label19.Text = "label19";
+            // 
+            // label20
+            // 
+            this.label20.AutoSize = true;
+            this.label20.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label20.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
+            this.label20.Location = new System.Drawing.Point(261, 209);
+            this.label20.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label20.Name = "label20";
+            this.label20.Size = new System.Drawing.Size(48, 13);
+            this.label20.TabIndex = 23;
+            this.label20.Text = "label20";
+            // 
+            // label21
+            // 
+            this.label21.AutoSize = true;
+            this.label21.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label21.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
+            this.label21.Location = new System.Drawing.Point(261, 231);
+            this.label21.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label21.Name = "label21";
+            this.label21.Size = new System.Drawing.Size(48, 13);
+            this.label21.TabIndex = 24;
+            this.label21.Text = "label21";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -821,6 +863,9 @@
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Label label18;
         private System.Windows.Forms.TextBox textBox9;
+        private System.Windows.Forms.Label label19;
+        private System.Windows.Forms.Label label21;
+        private System.Windows.Forms.Label label20;
     }
 }
 

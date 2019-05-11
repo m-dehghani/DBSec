@@ -192,7 +192,7 @@ namespace DBSec
 
             SecTab.Enabled = false;
             panel1.Enabled=panel3.Enabled = false;
-            label2.Text =label7.Text= label3.Text =label10.Text= label11.Text=label12.Text="";
+            label2.Text =label7.Text= label3.Text =label10.Text= label11.Text=label12.Text= label9.Text= label20.Text= label21.Text="";
         }
 
         private void Button2_Click(object sender, EventArgs e)
@@ -204,58 +204,64 @@ namespace DBSec
 
         private async void Button5_Click(object sender, EventArgs e)
         {
-           
-            if ((string.IsNullOrEmpty(txt_DB.Text.Trim())) || (string.IsNullOrEmpty(txt_ServerIP.Text.Trim())))
-            {
-                MessageBox.Show("لطفا تمام فیلدها را پر نمایید");
-            }
-            else
-            {
-                var rawConstr = Utility.MakeConnectionStr(txt_ServerIP.Text, txt_DB.Text,
-                    Utility.ToInsecureString(Utility.DBPass));
-                var res =await  Utility.TestDbConnection(rawConstr);
-                if (res != "Ok")
-                {
-                    MessageBox.Show("خطا در اتصال به دیتابیس " + res);
-                    return;
-                }
-                var secure = Utility.ToSecureString(
-                    rawConstr);
 
-                string conStr = Utility.EncryptString(secure);
-                ConfigXmlDocument configXmlDocument = new ConfigXmlDocument();
-                configXmlDocument.Load(textBox3.Text);
-                var c= configXmlDocument.DocumentElement.GetElementsByTagName("appSettings").Item(0).ChildNodes;
-                string contaiof;
-                bool found = false;
-                foreach (XmlNode node in configXmlDocument.DocumentElement.GetElementsByTagName("appSettings").Item(0).ChildNodes)
+            try
+            {
+                if ((string.IsNullOrEmpty(txt_DB.Text.Trim())) || (string.IsNullOrEmpty(txt_ServerIP.Text.Trim())))
                 {
-                    if (node.Attributes["key"].Value == "conn")
+                    MessageBox.Show("لطفا تمام فیلدها را پر نمایید");
+                }
+                else
+                {
+                    var rawConstr = Utility.MakeConnectionStr(txt_ServerIP.Text, txt_DB.Text,
+                        Utility.ToInsecureString(Utility.DBPass));
+                    var res = await Utility.TestDbConnection(rawConstr);
+                    if (res != "Ok")
                     {
-                        found = true;
-                        node.Attributes["value"].Value = conStr;
+                        MessageBox.Show("خطا در اتصال به دیتابیس " + res);
+                        return;
                     }
-                     
+                    var secure = Utility.ToSecureString(
+                        rawConstr);
+
+                    string conStr = Utility.EncryptString(secure);
+                    ConfigXmlDocument configXmlDocument = new ConfigXmlDocument();
+                    configXmlDocument.Load(textBox3.Text);
+                    var c = configXmlDocument.DocumentElement.GetElementsByTagName("appSettings").Item(0).ChildNodes;
+                    string contaiof;
+                    bool found = false;
+                    foreach (XmlNode node in configXmlDocument.DocumentElement.GetElementsByTagName("appSettings").Item(0).ChildNodes)
+                    {
+                        if (node.Attributes["key"].Value == "conn")
+                        {
+                            found = true;
+                            node.Attributes["value"].Value = conStr;
+                        }
+
+                    }
+                    if (found != true)
+                    {
+                        configXmlDocument.DocumentElement.GetElementsByTagName("appSettings").Item(0).InnerXml = string.Format("<add key=\"conn\" value=\"{0}\" />", conStr) + configXmlDocument.DocumentElement.GetElementsByTagName("appSettings").Item(0).InnerXml;
+                    }
+
+
+                    //foreach (XmlNode node in configXmlDocument.DocumentElement.GetElementsByTagName("userSettings").Item(0).ChildNodes)
+                    //   "TinyServerID"
+
+                    configXmlDocument.Save(textBox3.Text);
+                    label20.Text = "کانفیگ سرور ساخته شد";
+                    var newnode = configXmlDocument.DocumentElement.GetElementsByTagName("Sinad.Properties.Settings").Item(0).ChildNodes[6];
+                    newnode.InnerText = textBox9.Text;
+
+                    configXmlDocument.Save(textBox3.Text + ".client");
+                    label21.Text = "کانفیگ کلاینت با ساخته شد";
+
+                    label19.Text = "\u2714";
+
+
                 }
-                if (found != true)
-                {
-                    configXmlDocument.DocumentElement.GetElementsByTagName("appSettings").Item(0).InnerXml = string.Format("<add key=\"conn\" value=\"{0}\" />", conStr) + configXmlDocument.DocumentElement.GetElementsByTagName("appSettings").Item(0).InnerXml;
-                }
-
-              
-                //foreach (XmlNode node in configXmlDocument.DocumentElement.GetElementsByTagName("userSettings").Item(0).ChildNodes)
-                //   "TinyServerID"
-
-                configXmlDocument.Save(textBox3.Text+"1");
-
-                var newnode = configXmlDocument.DocumentElement.GetElementsByTagName("Sinad.Properties.Settings").Item(0).ChildNodes[6];
-                newnode.InnerText =textBox9.Text;
-
-                configXmlDocument.Save(textBox3.Text+".client");
-
-
-
-            }
+            }catch(Exception ex)
+            { MessageBox.Show(ex.Message); }
         }
 
 
