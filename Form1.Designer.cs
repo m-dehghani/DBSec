@@ -74,6 +74,17 @@
             this.label13 = new System.Windows.Forms.Label();
             this.textBox5 = new System.Windows.Forms.TextBox();
             this.button11 = new System.Windows.Forms.Button();
+            this.label14 = new System.Windows.Forms.Label();
+            this.label15 = new System.Windows.Forms.Label();
+            this.textBox6 = new System.Windows.Forms.TextBox();
+            this.button12 = new System.Windows.Forms.Button();
+            this.label16 = new System.Windows.Forms.Label();
+            this.textBox7 = new System.Windows.Forms.TextBox();
+            this.button13 = new System.Windows.Forms.Button();
+            this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
+            this.label17 = new System.Windows.Forms.Label();
+            this.textBox8 = new System.Windows.Forms.TextBox();
+            this.button14 = new System.Windows.Forms.Button();
             this.SecTab.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
@@ -208,6 +219,16 @@
             // 
             // tabPage3
             // 
+            this.tabPage3.Controls.Add(this.label17);
+            this.tabPage3.Controls.Add(this.textBox8);
+            this.tabPage3.Controls.Add(this.button14);
+            this.tabPage3.Controls.Add(this.label16);
+            this.tabPage3.Controls.Add(this.textBox7);
+            this.tabPage3.Controls.Add(this.button13);
+            this.tabPage3.Controls.Add(this.label15);
+            this.tabPage3.Controls.Add(this.textBox6);
+            this.tabPage3.Controls.Add(this.button12);
+            this.tabPage3.Controls.Add(this.label14);
             this.tabPage3.Controls.Add(this.button9);
             this.tabPage3.Controls.Add(this.textBox2);
             this.tabPage3.Controls.Add(this.button3);
@@ -220,16 +241,17 @@
             // 
             // button9
             // 
-            this.button9.Location = new System.Drawing.Point(307, 195);
+            this.button9.Location = new System.Drawing.Point(263, 237);
             this.button9.Name = "button9";
-            this.button9.Size = new System.Drawing.Size(135, 51);
+            this.button9.Size = new System.Drawing.Size(165, 73);
             this.button9.TabIndex = 2;
             this.button9.Text = "Restore";
             this.button9.UseVisualStyleBackColor = true;
+            this.button9.Click += new System.EventHandler(this.Button9_Click);
             // 
             // textBox2
             // 
-            this.textBox2.Location = new System.Drawing.Point(143, 92);
+            this.textBox2.Location = new System.Drawing.Point(131, 49);
             this.textBox2.Name = "textBox2";
             this.textBox2.Size = new System.Drawing.Size(418, 22);
             this.textBox2.TabIndex = 1;
@@ -237,7 +259,7 @@
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(567, 87);
+            this.button3.Location = new System.Drawing.Point(555, 44);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(84, 32);
             this.button3.TabIndex = 0;
@@ -536,6 +558,97 @@
             this.button11.UseVisualStyleBackColor = true;
             this.button11.Click += new System.EventHandler(this.Button11_Click);
             // 
+            // label14
+            // 
+            this.label14.AutoSize = true;
+            this.label14.Location = new System.Drawing.Point(128, 29);
+            this.label14.Name = "label14";
+            this.label14.Size = new System.Drawing.Size(79, 17);
+            this.label14.TabIndex = 20;
+            this.label14.Text = "Master Key";
+            // 
+            // label15
+            // 
+            this.label15.AutoSize = true;
+            this.label15.Location = new System.Drawing.Point(128, 130);
+            this.label15.Name = "label15";
+            this.label15.Size = new System.Drawing.Size(71, 17);
+            this.label15.TabIndex = 23;
+            this.label15.Text = "Certificate";
+            // 
+            // textBox6
+            // 
+            this.textBox6.Location = new System.Drawing.Point(131, 150);
+            this.textBox6.Name = "textBox6";
+            this.textBox6.Size = new System.Drawing.Size(418, 22);
+            this.textBox6.TabIndex = 22;
+            // 
+            // button12
+            // 
+            this.button12.Location = new System.Drawing.Point(555, 145);
+            this.button12.Name = "button12";
+            this.button12.Size = new System.Drawing.Size(84, 32);
+            this.button12.TabIndex = 21;
+            this.button12.Text = "Browse";
+            this.button12.UseVisualStyleBackColor = true;
+            this.button12.Click += new System.EventHandler(this.Button12_Click);
+            // 
+            // label16
+            // 
+            this.label16.AutoSize = true;
+            this.label16.Location = new System.Drawing.Point(130, 175);
+            this.label16.Name = "label16";
+            this.label16.Size = new System.Drawing.Size(69, 17);
+            this.label16.TabIndex = 26;
+            this.label16.Text = "Database";
+            // 
+            // textBox7
+            // 
+            this.textBox7.Location = new System.Drawing.Point(131, 195);
+            this.textBox7.Name = "textBox7";
+            this.textBox7.Size = new System.Drawing.Size(418, 22);
+            this.textBox7.TabIndex = 25;
+            // 
+            // button13
+            // 
+            this.button13.Location = new System.Drawing.Point(555, 190);
+            this.button13.Name = "button13";
+            this.button13.Size = new System.Drawing.Size(84, 32);
+            this.button13.TabIndex = 24;
+            this.button13.Text = "Browse";
+            this.button13.UseVisualStyleBackColor = true;
+            this.button13.Click += new System.EventHandler(this.Button13_Click);
+            // 
+            // openFileDialog1
+            // 
+            this.openFileDialog1.FileName = "openFileDialog1";
+            // 
+            // label17
+            // 
+            this.label17.AutoSize = true;
+            this.label17.Location = new System.Drawing.Point(128, 81);
+            this.label17.Name = "label17";
+            this.label17.Size = new System.Drawing.Size(80, 17);
+            this.label17.TabIndex = 29;
+            this.label17.Text = "Private Key";
+            // 
+            // textBox8
+            // 
+            this.textBox8.Location = new System.Drawing.Point(131, 101);
+            this.textBox8.Name = "textBox8";
+            this.textBox8.Size = new System.Drawing.Size(418, 22);
+            this.textBox8.TabIndex = 28;
+            // 
+            // button14
+            // 
+            this.button14.Location = new System.Drawing.Point(555, 96);
+            this.button14.Name = "button14";
+            this.button14.Size = new System.Drawing.Size(84, 32);
+            this.button14.TabIndex = 27;
+            this.button14.Text = "Browse";
+            this.button14.UseVisualStyleBackColor = true;
+            this.button14.Click += new System.EventHandler(this.Button14_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -614,6 +727,17 @@
         private System.Windows.Forms.Label label13;
         private System.Windows.Forms.TextBox textBox5;
         private System.Windows.Forms.Button button11;
+        private System.Windows.Forms.Label label16;
+        private System.Windows.Forms.TextBox textBox7;
+        private System.Windows.Forms.Button button13;
+        private System.Windows.Forms.Label label15;
+        private System.Windows.Forms.TextBox textBox6;
+        private System.Windows.Forms.Button button12;
+        private System.Windows.Forms.Label label14;
+        private System.Windows.Forms.OpenFileDialog openFileDialog1;
+        private System.Windows.Forms.Label label17;
+        private System.Windows.Forms.TextBox textBox8;
+        private System.Windows.Forms.Button button14;
     }
 }
 

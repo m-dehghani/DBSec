@@ -55,7 +55,7 @@ namespace DBSec
                     SqlCommand command = new SqlCommand(comm, conn);
                     command.ExecuteNonQuery();
                     MessageBox.Show("certificate با موفقیت کپی شد");
-                    comm = string.Format(@"BACKUP MASTER KEY TO FILE = N'{0}\MasterKey'  ENCRYPTION BY PASSWORD = 'admin@123';",
+                    comm = string.Format(@"BACKUP MASTER KEY TO FILE = N'{0}\MasterKey.key'  ENCRYPTION BY PASSWORD = 'admin@123';",
                         pathToBackup);
                     command = new SqlCommand(comm, conn);
                     command.ExecuteNonQuery();
@@ -74,8 +74,8 @@ namespace DBSec
         {
             try
             {
-                SqlConnection conn = new SqlConnection(Utility.MakeConnectionStr(txt_ServerIP.Text, txt_DB.Text,
-                      Utility.ToInsecureString(Utility.DBPass)));
+                SqlConnection conn = new SqlConnection(Utility.MakeConnectionStr(IP, DB,
+                      pass));
                 //SqlCommand testcom = new SqlCommand(string.Format(@"USE master;
                 //CREATE MASTER KEY ENCRYPTION BY PASSWORD = '{0}';
                 //CREATE CERTIFICATE MyServerCert WITH SUBJECT = 'My DEK Certificate';
@@ -93,7 +93,7 @@ namespace DBSec
                                                       WITH ALGORITHM = AES_128
                                                       ENCRYPTION BY SERVER CERTIFICATE MyServerCert;  
                                                       ALTER DATABASE {1}
-                                                      SET ENCRYPTION ON;", Utility.ToInsecureString(Utility.DBPass), txt_DB.Text),
+                                                      SET ENCRYPTION ON;", pass, DB),
                                                                     conn);
                 //await conn.OpenAsync();
                 //await testcom.ExecuteNonQueryAsync();
@@ -113,7 +113,46 @@ namespace DBSec
             }
         }
 
+        private async Task RestoreCertificateAndDb(string IP, string DB, string pass,string masterKeyPath, string certificatePath,string privateKeyPath,string DbPath,string ldfPath)
+        {
 
+
+            try
+            {
+                
+                SqlConnection conn = new SqlConnection(Utility.MakeConnectionStr(IP, DB,
+                      pass));
+                string textCommad = string.Format(@"RESTORE MASTER KEY   
+                              FROM FILE = N'{0}'   
+                              DECRYPTION BY PASSWORD = 'admin@123'   
+                              ENCRYPTION BY PASSWORD = 'admin@123';  
+                              OPEN MASTER KEY DECRYPTION BY PASSWORD = 'admin@123'  
+                              use master;
+                              create certificate MyServerCert
+                              from file = N'{1}'
+                              with private key
+                                    ( file = N'{2}'
+                                        , decryption by password = N'AReallyStr0ngK#y4You'
+                                    )
+                              CREATE DATABASE Sinad   
+                              ON (FILENAME = '{3}'),   
+                                 (FILENAME = '{4}')   
+                              FOR ATTACH;", masterKeyPath,certificatePath,privateKeyPath,DbPath,ldfPath);
+
+                SqlCommand command = new SqlCommand(textCommad, conn);
+                await conn.OpenAsync();
+                command.ExecuteNonQuery();
+                MessageBox.Show("با موفقیت انجام شد");
+                conn.Close();
+
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+
+
+        }
 
 
         public async Task<string> ReadFromTiny()
@@ -158,7 +197,8 @@ namespace DBSec
         private void Button2_Click(object sender, EventArgs e)
         {
             DialogResult res = folderBrowserDialog1.ShowDialog();
-            textBox1.Text = folderBrowserDialog1.SelectedPath;
+            if (res == DialogResult.OK)
+                textBox1.Text = folderBrowserDialog1.SelectedPath;
         }
 
         private async void Button5_Click(object sender, EventArgs e)
@@ -197,7 +237,6 @@ namespace DBSec
             var result =await ReadFromTiny();
             if (result == null || result == "error")
             {
-               
                 panel1.Enabled = false;
                 MessageBox.Show("خطا در خواندن");
                 TinyCode.BackColor = Color.Red;
@@ -274,8 +313,10 @@ namespace DBSec
 
         private void Button3_Click_1(object sender, EventArgs e)
         {
-            folderBrowserDialog1.ShowDialog();
-            textBox2.Text = folderBrowserDialog1.SelectedPath;
+            openFileDialog1.Filter = "key files(*.key) | *.key ";
+               var res= openFileDialog1.ShowDialog();
+            if (res == DialogResult.OK)
+                textBox2.Text = openFileDialog1.FileName;
         }
 
         private void TextBox2_TextChanged(object sender, EventArgs e)
@@ -325,7 +366,39 @@ namespace DBSec
         private void Button11_Click(object sender, EventArgs e)
         {
             DialogResult res = folderBrowserDialog1.ShowDialog();
-            textBox5.Text = folderBrowserDialog1.SelectedPath;
+            if (res == DialogResult.OK)
+                textBox5.Text = folderBrowserDialog1.SelectedPath;
+        }
+
+        private void Button12_Click(object sender, EventArgs e)
+        {
+            openFileDialog1.Filter = "certificate files(*.cer) | *.cer ";
+            var res= openFileDialog1.ShowDialog();
+            if (res == DialogResult.OK)
+                textBox6.Text = openFileDialog1.FileName;
+        }
+
+        private void Button13_Click(object sender, EventArgs e)
+        {
+            openFileDialog1.Filter = "DB files(*.mdf) | *.mdf";
+            var res= openFileDialog1.ShowDialog();
+            if(res==DialogResult.OK)
+                textBox7.Text = openFileDialog1.FileName;
+        }
+
+        private async void Button9_Click(object sender, EventArgs e)
+        {
+            var ldfpath =textBox7.Text.Remove(textBox7.Text.Length-3,3)+"ldf";
+            await RestoreCertificateAndDb(txt_ServerIP.Text,"master", Utility.ToInsecureString(Utility.DBPass),textBox2.Text
+                ,textBox6.Text,textBox8.Text,textBox7.Text,ldfpath);
+        }
+
+        private void Button14_Click(object sender, EventArgs e)
+        {
+            openFileDialog1.Filter = "private key files(*.pvk) | *.pvk ";
+            var res = openFileDialog1.ShowDialog();
+            if (res == DialogResult.OK)
+                textBox8.Text = openFileDialog1.FileName;
         }
     }
 }
