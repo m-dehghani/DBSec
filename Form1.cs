@@ -14,6 +14,7 @@ using System.Web;
 using System.Security;
 using System.Configuration;
 using System.Xml;
+using System.Threading;
 
 namespace DBSec
 {
@@ -190,8 +191,8 @@ namespace DBSec
         {
 
             SecTab.Enabled = false;
-            panel1.Enabled = false;
-            label2.Text = label3.Text =label10.Text= label11.Text=label12.Text="";
+            panel1.Enabled=panel3.Enabled = false;
+            label2.Text =label7.Text= label3.Text =label10.Text= label11.Text=label12.Text="";
         }
 
         private void Button2_Click(object sender, EventArgs e)
@@ -203,7 +204,7 @@ namespace DBSec
 
         private async void Button5_Click(object sender, EventArgs e)
         {
-
+           
             if ((string.IsNullOrEmpty(txt_DB.Text.Trim())) || (string.IsNullOrEmpty(txt_ServerIP.Text.Trim())))
             {
                 MessageBox.Show("لطفا تمام فیلدها را پر نمایید");
@@ -224,8 +225,35 @@ namespace DBSec
                 string conStr = Utility.EncryptString(secure);
                 ConfigXmlDocument configXmlDocument = new ConfigXmlDocument();
                 configXmlDocument.Load(textBox3.Text);
-                configXmlDocument.DocumentElement.GetElementsByTagName("appSettings").Item(0).InnerXml = string.Format("<add key=\"conn1\" value=\"{0}\" />", conStr) + configXmlDocument.DocumentElement.GetElementsByTagName("appSettings").Item(0).InnerXml;
-                configXmlDocument.Save(textBox3.Text);
+                var c= configXmlDocument.DocumentElement.GetElementsByTagName("appSettings").Item(0).ChildNodes;
+                string contaiof;
+                bool found = false;
+                foreach (XmlNode node in configXmlDocument.DocumentElement.GetElementsByTagName("appSettings").Item(0).ChildNodes)
+                {
+                    if (node.Attributes["key"].Value == "conn")
+                    {
+                        found = true;
+                        node.Attributes["value"].Value = conStr;
+                    }
+                     
+                }
+                if (found != true)
+                {
+                    configXmlDocument.DocumentElement.GetElementsByTagName("appSettings").Item(0).InnerXml = string.Format("<add key=\"conn\" value=\"{0}\" />", conStr) + configXmlDocument.DocumentElement.GetElementsByTagName("appSettings").Item(0).InnerXml;
+                }
+
+              
+                //foreach (XmlNode node in configXmlDocument.DocumentElement.GetElementsByTagName("userSettings").Item(0).ChildNodes)
+                //   "TinyServerID"
+
+                configXmlDocument.Save(textBox3.Text+"1");
+
+                var newnode = configXmlDocument.DocumentElement.GetElementsByTagName("Sinad.Properties.Settings").Item(0).ChildNodes[6];
+                newnode.InnerText =textBox9.Text;
+
+                configXmlDocument.Save(textBox3.Text+".client");
+
+
 
             }
         }
@@ -233,27 +261,40 @@ namespace DBSec
 
         private async void Button6_Click(object sender, EventArgs e)
         {
-
-            var result =await ReadFromTiny();
-            if (result == null || result == "error")
+          
+            
+            try
             {
-                panel1.Enabled = false;
-                MessageBox.Show("خطا در خواندن");
-                TinyCode.BackColor = Color.Red;
-                txt_Pass.BackColor = Color.Red;
-            }
-            else
+                var result = await ReadFromTiny();
+
+
+                if (result == null || result == "error")
+                {
+                    panel1.Enabled = false;
+                    MessageBox.Show("خطا در خواندن");
+                    TinyCode.BackColor = Color.Red;
+
+                    button6.BackColor = Color.Red;
+                }
+                else
+                {
+                    panel1.Enabled = true;
+                    Utility.DBPass = Utility.ToSecureString(result);
+                    Utility.entropy = System.Text.Encoding.Unicode.GetBytes(result);
+                   
+                    button6.BackColor = Color.Green;
+                    TinyCode.BackColor = Color.Lime;
+
+                }
+            }catch(Exception ex)
             {
-                panel1.Enabled = true;
-                Utility.DBPass = Utility.ToSecureString(result);
-                Utility.entropy = System.Text.Encoding.Unicode.GetBytes(result);
-                txt_Pass.BackColor = Color.Lime;
-                TinyCode.BackColor = Color.Lime;
-             
+                MessageBox.Show(ex.Message);
             }
-
-
+            
         }
+        
+
+
 
         private void Txt_ServerIP_TextChanged(object sender, EventArgs e)
         {
@@ -278,11 +319,16 @@ namespace DBSec
                     label10.ForeColor = Color.Red;
                     SecTab.Enabled = false;
                     label10.Text="خطا در اتصال به دیتابیس " + res;
+                    button8.BackColor = Color.Red;
+                    panel3.Enabled = true;
+                    label7.Text = "ابتدا پسورد را تغییر دهید";
                     return;
                 }
                 else
                 {
                     //abel10.BackColor = Color.
+                    button8.BackColor = Color.Lime;
+                    panel3.Enabled = false;
                     label10.ForeColor = Color.Lime;
                     SecTab.Enabled = true;
                     label10.Text = "\u2714" ;
@@ -313,7 +359,7 @@ namespace DBSec
 
         private void Button3_Click_1(object sender, EventArgs e)
         {
-            openFileDialog1.Filter = "key files(*.key) | *.key ";
+            openFileDialog1.Filter = "key files(*.key)|*.key";
                var res= openFileDialog1.ShowDialog();
             if (res == DialogResult.OK)
                 textBox2.Text = openFileDialog1.FileName;
@@ -324,33 +370,9 @@ namespace DBSec
 
         }
 
-        private void Button10_Click(object sender, EventArgs e)
+        private async void Button10_Click(object sender, EventArgs e)
         {
-            using (SqlConnection conn = new SqlConnection(Utility.MakeConnectionStr(txt_ServerIP.Text, "master", textBox4.Text)))
-            {
-                try
-                {
-                    conn.Open();
-                    SqlCommand comm = new SqlCommand(
-
-                      string.Format(@"ALTER LOGIN [sa] WITH PASSWORD='{0}';ALTER LOGIN sa WITH DEFAULT_DATABASE = [master];", Utility.ToInsecureString(Utility.DBPass)), conn);
-
-                   
-                    comm.ExecuteNonQuery();
-                    textBox4.BackColor = Color.Lime;
-                    label11.Text = "\u2714" ;
-                   
-                    conn.Close();
-                }
-                catch(Exception ex)
-                {
-                    
-                    textBox4.BackColor = Color.Red;
-                   
-                    MessageBox.Show(ex.Message);
-                    
-                }
-            }
+            
         }
 
         private void Label11_Click(object sender, EventArgs e)
@@ -372,7 +394,7 @@ namespace DBSec
 
         private void Button12_Click(object sender, EventArgs e)
         {
-            openFileDialog1.Filter = "certificate files(*.cer) | *.cer ";
+            openFileDialog1.Filter = "certificate files(*.cer)|*.cer";
             var res= openFileDialog1.ShowDialog();
             if (res == DialogResult.OK)
                 textBox6.Text = openFileDialog1.FileName;
@@ -380,7 +402,7 @@ namespace DBSec
 
         private void Button13_Click(object sender, EventArgs e)
         {
-            openFileDialog1.Filter = "DB files(*.mdf) | *.mdf";
+            openFileDialog1.Filter = "DB files(*.mdf)|*.mdf";
             var res= openFileDialog1.ShowDialog();
             if(res==DialogResult.OK)
                 textBox7.Text = openFileDialog1.FileName;
@@ -395,10 +417,76 @@ namespace DBSec
 
         private void Button14_Click(object sender, EventArgs e)
         {
-            openFileDialog1.Filter = "private key files(*.pvk) | *.pvk ";
+            openFileDialog1.Filter = "private key files(*.pvk)|*.pvk";
             var res = openFileDialog1.ShowDialog();
             if (res == DialogResult.OK)
                 textBox8.Text = openFileDialog1.FileName;
+        }
+
+        private async void button15_Click(object sender, EventArgs e)
+        {
+            using (SqlConnection conn = new SqlConnection(Utility.MakeConnectionStr(txt_ServerIP.Text, "master", textBox4.Text)))
+            {
+                try
+                {
+                    conn.Open();
+                    SqlCommand comm = new SqlCommand(
+
+                      string.Format(@"ALTER LOGIN [sa] WITH PASSWORD='{0}';ALTER LOGIN sa WITH DEFAULT_DATABASE = [master];", Utility.ToInsecureString(Utility.DBPass)), conn);
+
+
+                    comm.ExecuteNonQuery();
+                    textBox4.BackColor = Color.Lime;
+                    label11.Text = "\u2714";
+
+                    conn.Close();
+                    button8.BackColor = Color.Green;
+                    await DisableAllUserButSa(txt_ServerIP.Text, "master", Utility.ToInsecureString(Utility.DBPass));
+                }
+                catch (Exception ex)
+                {
+
+                    textBox4.BackColor = Color.Red;
+
+                    MessageBox.Show(ex.Message);
+
+                }
+            }
+
+        }
+
+        public async Task DisableAllUserButSa(string address,string db,string pass)
+        {
+            try
+            {
+                string strCommand = @"SELECT 'ALTER LOGIN ' + QUOTENAME(sp.name) + ' DISABLE;'
+                                  FROM sys.server_principals sp
+                                  WHERE sp.principal_id > 100   
+                                  AND sp.is_disabled = 0
+                                  AND sp.type IN ( 'U' , 'G'  , 'S'  );";
+                SqlConnection conn = new SqlConnection(Utility.MakeConnectionStr(address, db, pass));
+                SqlCommand command = new SqlCommand(strCommand, conn);
+                await conn.OpenAsync();
+                
+                command.ExecuteNonQuery();
+                MessageBox.Show("تمامی کاربران غیرفعال شدند");
+                conn.Close();
+            }catch(Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+           openFileDialog1.Filter = "config files(*.config)|*.config|All files(*.*)|*.*";
+            openFileDialog1.FilterIndex = 2;
+            var res=openFileDialog1.ShowDialog();
+
+            if (res == DialogResult.OK)
+                textBox3.Text = openFileDialog1.FileName;
+
         }
     }
 }
