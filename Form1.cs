@@ -15,6 +15,7 @@ using System.Security;
 using System.Configuration;
 using System.Xml;
 using System.Threading;
+using System.Diagnostics;
 
 namespace DBSec
 {
@@ -447,7 +448,7 @@ namespace DBSec
 
                     conn.Close();
                     button8.BackColor = Color.Green;
-                    await DisableAllUserButSa(txt_ServerIP.Text, "master", Utility.ToInsecureString(Utility.DBPass));
+                    await DisableAllUserButSa(txt_ServerIP.Text, "sinad", Utility.ToInsecureString(Utility.DBPass));
                 }
                 catch (Exception ex)
                 {
@@ -469,12 +470,29 @@ namespace DBSec
                                   FROM sys.server_principals sp
                                   WHERE sp.principal_id > 100   
                                   AND sp.is_disabled = 0
-                                  AND sp.type IN ( 'U' , 'G'  , 'S'  );";
+                                  AND sp.type IN ( 'U'   , 'S'  ) ;";
                 SqlConnection conn = new SqlConnection(Utility.MakeConnectionStr(address, db, pass));
+                
                 SqlCommand command = new SqlCommand(strCommand, conn);
                 await conn.OpenAsync();
+                var reader=command.ExecuteReader();
+               
+                List<string> commands = new List<string>();
+                while (reader.Read())
+                {
+                    commands.Add(reader[0].ToString());
+                   
+                }
+                conn.Close();
+                conn.Open();
+                SqlCommand alterLoginCommand;
+                commands.ForEach(c =>
+                {
+                    alterLoginCommand = new SqlCommand(c, conn);
+                    alterLoginCommand.ExecuteNonQuery();
+                });
+
                 
-                command.ExecuteNonQuery();
                 MessageBox.Show("تمامی کاربران غیرفعال شدند");
                 conn.Close();
             }catch(Exception ex)
