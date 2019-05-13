@@ -76,7 +76,6 @@
             this.label8 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.txt_ServerIP = new System.Windows.Forms.TextBox();
-            this.txt_DB = new System.Windows.Forms.TextBox();
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
             this.button6 = new System.Windows.Forms.Button();
@@ -93,6 +92,7 @@
             this.button15 = new System.Windows.Forms.Button();
             this.panel3 = new System.Windows.Forms.Panel();
             this.label7 = new System.Windows.Forms.Label();
+            this.txt_DB = new System.Windows.Forms.ComboBox();
             this.SecTab.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
@@ -633,7 +633,7 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(61, 49);
+            this.label6.Location = new System.Drawing.Point(61, 58);
             this.label6.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(24, 16);
@@ -645,20 +645,10 @@
             this.txt_ServerIP.Location = new System.Drawing.Point(89, 15);
             this.txt_ServerIP.Margin = new System.Windows.Forms.Padding(2);
             this.txt_ServerIP.Name = "txt_ServerIP";
-            this.txt_ServerIP.Size = new System.Drawing.Size(116, 22);
+            this.txt_ServerIP.Size = new System.Drawing.Size(121, 22);
             this.txt_ServerIP.TabIndex = 13;
             this.txt_ServerIP.Text = "192.168.0.156\\sql2008";
             this.txt_ServerIP.TextChanged += new System.EventHandler(this.Txt_ServerIP_TextChanged);
-            // 
-            // txt_DB
-            // 
-            this.txt_DB.Location = new System.Drawing.Point(89, 46);
-            this.txt_DB.Margin = new System.Windows.Forms.Padding(2);
-            this.txt_DB.Name = "txt_DB";
-            this.txt_DB.Size = new System.Drawing.Size(116, 22);
-            this.txt_DB.TabIndex = 11;
-            this.txt_DB.Text = "Sinad";
-            this.txt_DB.TextChanged += new System.EventHandler(this.Txt_DB_TextChanged);
             // 
             // saveFileDialog1
             // 
@@ -691,11 +681,11 @@
             // panel1
             // 
             this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel1.Controls.Add(this.txt_DB);
             this.panel1.Controls.Add(this.label10);
             this.panel1.Controls.Add(this.button8);
             this.panel1.Controls.Add(this.label8);
             this.panel1.Controls.Add(this.label6);
-            this.panel1.Controls.Add(this.txt_DB);
             this.panel1.Controls.Add(this.txt_ServerIP);
             this.panel1.Font = new System.Drawing.Font("Palatino Linotype", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.panel1.Location = new System.Drawing.Point(20, 61);
@@ -710,7 +700,7 @@
             this.label10.BackColor = System.Drawing.SystemColors.ButtonFace;
             this.label10.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label10.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
-            this.label10.Location = new System.Drawing.Point(9, 68);
+            this.label10.Location = new System.Drawing.Point(9, 61);
             this.label10.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(48, 13);
@@ -721,12 +711,12 @@
             // 
             this.button8.BackColor = System.Drawing.SystemColors.Control;
             this.button8.Font = new System.Drawing.Font("Palatino Linotype", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button8.Location = new System.Drawing.Point(89, 85);
+            this.button8.Location = new System.Drawing.Point(89, 84);
             this.button8.Margin = new System.Windows.Forms.Padding(2);
             this.button8.Name = "button8";
             this.button8.Size = new System.Drawing.Size(116, 36);
             this.button8.TabIndex = 17;
-            this.button8.Text = "Test Connection";
+            this.button8.Text = "Test DB";
             this.button8.UseVisualStyleBackColor = false;
             this.button8.Click += new System.EventHandler(this.Button8_Click);
             // 
@@ -825,6 +815,16 @@
             this.label7.TabIndex = 22;
             this.label7.Text = "label7";
             // 
+            // txt_DB
+            // 
+            this.txt_DB.FormattingEnabled = true;
+            this.txt_DB.Location = new System.Drawing.Point(90, 50);
+            this.txt_DB.Name = "txt_DB";
+            this.txt_DB.Size = new System.Drawing.Size(120, 24);
+            this.txt_DB.TabIndex = 19;
+            this.txt_DB.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
+            this.txt_DB.Enter += new System.EventHandler(this.comboBox1_Enter);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -881,7 +881,6 @@
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.TextBox textBox3;
         private System.Windows.Forms.Button button4;
-        private System.Windows.Forms.TextBox txt_DB;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.TextBox txt_ServerIP;
@@ -928,6 +927,7 @@
         private System.Windows.Forms.RadioButton radioButton2;
         private System.Windows.Forms.RadioButton radioButton1;
         private System.Windows.Forms.Button button10;
+        private System.Windows.Forms.ComboBox txt_DB;
     }
 }
 

@@ -51,7 +51,7 @@ namespace DBSec
                 try
                 {
                     await conn.OpenAsync();
-                    var comm = string.Format(@" use master; OPEN MASTER KEY DECRYPTION BY PASSWORD = '{0}';BACKUP DATABASE a TO DISK=N'{1}\test.bak';",pass,pathToBackup);
+                    var comm = string.Format(@" use master; OPEN MASTER KEY DECRYPTION BY PASSWORD = '{0}';BACKUP DATABASE a TO DISK=N'{1}\Sinad.bak';",pass,pathToBackup);
                     SqlCommand command = new SqlCommand(comm, conn);
                     command.ExecuteNonQuery();
                     MessageBox.Show("Backup با موفقیت کپی شد");
@@ -110,16 +110,12 @@ namespace DBSec
             {
                 SqlConnection conn = new SqlConnection(Utility.MakeConnectionStr(IP, DB,
                       pass));
-                //SqlCommand testcom = new SqlCommand(string.Format(@"USE master;
-                //CREATE MASTER KEY ENCRYPTION BY PASSWORD = '{0}';
-                //CREATE CERTIFICATE MyServerCert WITH SUBJECT = 'My DEK Certificate';
-                //USE {1};
-                //CREATE DATABASE ENCRYPTION KEY
-                //                                          WITH ALGORITHM = AES_128
-                //                                          ENCRYPTION BY SERVER CERTIFICATE MyServerCert;
-                //ALTER DATABASE {1}
-                //SET ENCRYPTION ON; ", Utility.ToInsecureString(Utility.DBPass),"test2"), conn);
-                SqlCommand command = new SqlCommand(string.Format(@"USE master;
+
+                SqlCommand command;
+
+
+
+                 command = new SqlCommand(string.Format(@"USE master;
                                                       CREATE MASTER KEY ENCRYPTION BY PASSWORD ='{0}';
                                                       CREATE CERTIFICATE MyServerCert WITH SUBJECT = 'My DEK Certificate';
                                                       USE {1};
@@ -247,7 +243,7 @@ FROM DISK = '{3}'", masterKeyPath, certificatePath, privateKeyPath, DbPath,pass)
         {
             radioButton2.Checked = true;
             //SecTab.Enabled = false;
-            panel1.Enabled=panel3.Enabled = false;
+            button8.Enabled= panel1.Enabled=panel3.Enabled = false;
             label2.Text =label7.Text= label3.Text =label10.Text= label11.Text=label12.Text= label9.Text= label20.Text= label21.Text="";
         }
 
@@ -363,6 +359,7 @@ FROM DISK = '{3}'", masterKeyPath, certificatePath, privateKeyPath, DbPath,pass)
 
         private void Txt_ServerIP_TextChanged(object sender, EventArgs e)
         {
+            
             //SecTab.Enabled = false;
         }
 
@@ -379,6 +376,7 @@ FROM DISK = '{3}'", masterKeyPath, certificatePath, privateKeyPath, DbPath,pass)
                 var rawConstr = Utility.MakeConnectionStr(txt_ServerIP.Text, txt_DB.Text,
                     Utility.ToInsecureString(Utility.DBPass));
                 var res =await Utility.TestDbConnection(rawConstr);
+                
                 if (res != "Ok")
                 {
                     label10.ForeColor = Color.Red;
@@ -391,14 +389,75 @@ FROM DISK = '{3}'", masterKeyPath, certificatePath, privateKeyPath, DbPath,pass)
                 }
                 else
                 {
+                    await CheckForDbEncrypted(txt_ServerIP.Text, txt_DB.Text,Utility.ToInsecureString(Utility.DBPass));
+                    
                     //abel10.BackColor = Color.
-                    button8.BackColor = Color.Lime;
+                    //button8.BackColor = Color.Lime;
                     panel3.Enabled = false;
-                    label10.ForeColor = Color.Lime;
-                    SecTab.Enabled = true;
+                    //label10.ForeColor = Color.Lime;
+                    //SecTab.Enabled = true;
                     label10.Text = "\u2714" ;
                 }
             }
+        }
+
+
+
+
+        private async Task CheckForDbEncrypted(string IP, string DB, string pass)
+        {
+
+            var constr = Utility.MakeConnectionStr(IP, DB, pass);
+            SqlConnection conn = new SqlConnection(constr);
+            SqlCommand command;
+            command = new SqlCommand(string.Format(@"SELECT
+    db.name,
+    db.is_encrypted,
+    dm.encryption_state,
+    dm.percent_complete,
+    dm.key_algorithm,
+    dm.key_length
+FROM
+    sys.databases db
+    LEFT OUTER JOIN sys.dm_database_encryption_keys dm
+        ON db.database_id = dm.database_id WHERE name = '{0}'; ", DB), conn);
+            await conn.OpenAsync();
+            var dbreader = await command.ExecuteReaderAsync();
+            dbreader.Read();
+            var test =(bool) dbreader[1];
+            conn.Close();
+            if (test == true)
+            {
+                var res = MessageBox.Show("این دیتابیس قبلا رمز نگاری شداست");
+                conn.Close();
+                return;
+            }
+            
+
+
+
+
+            command = new SqlCommand("use master;select COUNT(*) from sys.certificates where name='myservercert'", conn);
+            await conn.OpenAsync();
+            var reader = await command.ExecuteReaderAsync();
+            reader.Read();
+            if ((int)reader[0] > 0)
+            {
+                conn.Close();
+                var res = MessageBox.Show("certificate در این سیستم وجود دارد.آیا مایلید پاک شود؟", "", MessageBoxButtons.YesNo);
+                if (res != DialogResult.Yes)
+                    return;
+                else
+                {
+                    command = new SqlCommand("use master;drop certificate myservercert;drop master key;", conn);
+                    await conn.OpenAsync();
+                    command.ExecuteNonQuery();
+                    MessageBox.Show("با موفقیت حذف شد");
+                    conn.Close();
+                }
+            }
+
+
         }
 
         private void Txt_DB_TextChanged(object sender, EventArgs e)
@@ -412,7 +471,8 @@ FROM DISK = '{3}'", masterKeyPath, certificatePath, privateKeyPath, DbPath,pass)
                                 Utility.ToInsecureString(Utility.DBPass));
             await BackupCertificate(txt_ServerIP.Text, txt_DB.Text,
                                 Utility.ToInsecureString(Utility.DBPass),textBox5.Text);
-
+            await BackupDataBase(txt_ServerIP.Text, txt_DB.Text,
+                               Utility.ToInsecureString(Utility.DBPass), textBox5.Text);
             label12.Text = "\u2714";
         }
 
@@ -509,7 +569,7 @@ FROM DISK = '{3}'", masterKeyPath, certificatePath, privateKeyPath, DbPath,pass)
 
                     conn.Close();
                     button8.BackColor = Color.Green;
-                    await DisableAllUserButSa(txt_ServerIP.Text, "sinad", Utility.ToInsecureString(Utility.DBPass));
+                    await DisableAllUserButSa(txt_ServerIP.Text, txt_DB.Text, Utility.ToInsecureString(Utility.DBPass));
                 }
                 catch (Exception ex)
                 {
@@ -593,6 +653,34 @@ FROM DISK = '{3}'", masterKeyPath, certificatePath, privateKeyPath, DbPath,pass)
         {
             var str = "eqU4G5/Vuvwzc+DRnTCjB2YcangOex3rK3IsrzV7u0nZQQazYUv4xF/ENi8x4VZmI9kaYUcO0ov1syGYzMkmZLdKYQW7LN5MYmHS5n/j7d6pcrwdJ6fNpB+r+eXvfBVX732eW8z9Rn2hZDZ4S9poajznX5dclPQXIkqYLa33Y4L390uz7wStBTADAquUKJoCZa38uHK94cUiVbRRaEkRJnRqoQbsQpi+tI81qznlnZYALLY0USo9nKzBXZYYTQmL";
             Debug.WriteLine(Utility.Decrypt(str));
+        }
+
+        private async void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            
+        }
+
+        private async void comboBox1_Enter(object sender, EventArgs e)
+        {
+            try
+            {
+                string constr = Utility.MakeConnectionStr(txt_ServerIP.Text, "Master", Utility.ToInsecureString(Utility.DBPass));
+                SqlConnection conn = new SqlConnection(constr);
+                SqlCommand command = new SqlCommand("SELECT name FROM master.sys.databases", conn);
+                await conn.OpenAsync();
+                var reader = command.ExecuteReader();
+                while (reader.Read())
+                {
+                    txt_DB.Items.Add(reader[0]);
+                }
+                conn.Close();
+                button8.Enabled = true;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("خطایی رخ داده.لطفا آدرس را چک نمایید");
+                button8.Enabled = false;
+            }
         }
     }
 }
