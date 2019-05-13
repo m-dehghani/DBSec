@@ -45,12 +45,15 @@
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.button2 = new System.Windows.Forms.Button();
             this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.panel4 = new System.Windows.Forms.Panel();
+            this.radioButton2 = new System.Windows.Forms.RadioButton();
+            this.radioButton1 = new System.Windows.Forms.RadioButton();
+            this.button13 = new System.Windows.Forms.Button();
+            this.textBox7 = new System.Windows.Forms.TextBox();
             this.label17 = new System.Windows.Forms.Label();
             this.textBox8 = new System.Windows.Forms.TextBox();
             this.button14 = new System.Windows.Forms.Button();
             this.label16 = new System.Windows.Forms.Label();
-            this.textBox7 = new System.Windows.Forms.TextBox();
-            this.button13 = new System.Windows.Forms.Button();
             this.label15 = new System.Windows.Forms.Label();
             this.textBox6 = new System.Windows.Forms.TextBox();
             this.button12 = new System.Windows.Forms.Button();
@@ -85,6 +88,7 @@
             this.label4 = new System.Windows.Forms.Label();
             this.textBox4 = new System.Windows.Forms.TextBox();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.button10 = new System.Windows.Forms.Button();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.button15 = new System.Windows.Forms.Button();
             this.panel3 = new System.Windows.Forms.Panel();
@@ -94,6 +98,7 @@
             this.tabPage2.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.tabPage3.SuspendLayout();
+            this.panel4.SuspendLayout();
             this.tabPage5.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Tn)).BeginInit();
             this.panel1.SuspendLayout();
@@ -124,7 +129,7 @@
             this.SecTab.Margin = new System.Windows.Forms.Padding(2);
             this.SecTab.Name = "SecTab";
             this.SecTab.SelectedIndex = 0;
-            this.SecTab.Size = new System.Drawing.Size(652, 285);
+            this.SecTab.Size = new System.Drawing.Size(652, 304);
             this.SecTab.TabIndex = 1;
             // 
             // tabPage1
@@ -138,7 +143,7 @@
             this.tabPage1.Margin = new System.Windows.Forms.Padding(2);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(2);
-            this.tabPage1.Size = new System.Drawing.Size(644, 259);
+            this.tabPage1.Size = new System.Drawing.Size(644, 278);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Encrypt Database";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -161,7 +166,7 @@
             this.textBox5.Name = "textBox5";
             this.textBox5.Size = new System.Drawing.Size(434, 20);
             this.textBox5.TabIndex = 21;
-            this.textBox5.Text = "D:\\SqlBackup";
+            this.textBox5.Text = "D:\\secureDBPrj";
             // 
             // button11
             // 
@@ -208,7 +213,7 @@
             this.tabPage2.Margin = new System.Windows.Forms.Padding(2);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(2);
-            this.tabPage2.Size = new System.Drawing.Size(644, 259);
+            this.tabPage2.Size = new System.Drawing.Size(644, 278);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Backup Certificate";
             this.tabPage2.Click += new System.EventHandler(this.TabPage2_Click);
@@ -269,7 +274,7 @@
             this.textBox1.Name = "textBox1";
             this.textBox1.Size = new System.Drawing.Size(434, 20);
             this.textBox1.TabIndex = 2;
-            this.textBox1.Text = "D:\\SqlBackup";
+            this.textBox1.Text = "D:\\secureDBPrj";
             // 
             // button2
             // 
@@ -284,12 +289,11 @@
             // 
             // tabPage3
             // 
+            this.tabPage3.Controls.Add(this.panel4);
             this.tabPage3.Controls.Add(this.label17);
             this.tabPage3.Controls.Add(this.textBox8);
             this.tabPage3.Controls.Add(this.button14);
             this.tabPage3.Controls.Add(this.label16);
-            this.tabPage3.Controls.Add(this.textBox7);
-            this.tabPage3.Controls.Add(this.button13);
             this.tabPage3.Controls.Add(this.label15);
             this.tabPage3.Controls.Add(this.textBox6);
             this.tabPage3.Controls.Add(this.button12);
@@ -300,10 +304,67 @@
             this.tabPage3.Location = new System.Drawing.Point(4, 22);
             this.tabPage3.Margin = new System.Windows.Forms.Padding(2);
             this.tabPage3.Name = "tabPage3";
-            this.tabPage3.Size = new System.Drawing.Size(644, 259);
+            this.tabPage3.Size = new System.Drawing.Size(644, 278);
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "RestoreCertificate";
             this.tabPage3.UseVisualStyleBackColor = true;
+            this.tabPage3.Click += new System.EventHandler(this.tabPage3_Click);
+            // 
+            // panel4
+            // 
+            this.panel4.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel4.Controls.Add(this.radioButton2);
+            this.panel4.Controls.Add(this.radioButton1);
+            this.panel4.Controls.Add(this.button13);
+            this.panel4.Controls.Add(this.textBox7);
+            this.panel4.Location = new System.Drawing.Point(19, 158);
+            this.panel4.Name = "panel4";
+            this.panel4.Size = new System.Drawing.Size(534, 56);
+            this.panel4.TabIndex = 30;
+            // 
+            // radioButton2
+            // 
+            this.radioButton2.AutoSize = true;
+            this.radioButton2.Location = new System.Drawing.Point(19, 30);
+            this.radioButton2.Name = "radioButton2";
+            this.radioButton2.Size = new System.Drawing.Size(46, 17);
+            this.radioButton2.TabIndex = 27;
+            this.radioButton2.TabStop = true;
+            this.radioButton2.Text = ".bak";
+            this.radioButton2.UseVisualStyleBackColor = true;
+            this.radioButton2.CheckedChanged += new System.EventHandler(this.radioButton2_CheckedChanged);
+            // 
+            // radioButton1
+            // 
+            this.radioButton1.AutoSize = true;
+            this.radioButton1.Location = new System.Drawing.Point(19, 7);
+            this.radioButton1.Name = "radioButton1";
+            this.radioButton1.Size = new System.Drawing.Size(45, 17);
+            this.radioButton1.TabIndex = 26;
+            this.radioButton1.TabStop = true;
+            this.radioButton1.Text = ".mdf";
+            this.radioButton1.UseVisualStyleBackColor = true;
+            this.radioButton1.CheckedChanged += new System.EventHandler(this.radioButton1_CheckedChanged);
+            // 
+            // button13
+            // 
+            this.button13.Location = new System.Drawing.Point(397, 13);
+            this.button13.Margin = new System.Windows.Forms.Padding(2);
+            this.button13.Name = "button13";
+            this.button13.Size = new System.Drawing.Size(63, 26);
+            this.button13.TabIndex = 24;
+            this.button13.Text = "Browse";
+            this.button13.UseVisualStyleBackColor = true;
+            this.button13.Click += new System.EventHandler(this.Button13_Click);
+            // 
+            // textBox7
+            // 
+            this.textBox7.Location = new System.Drawing.Point(79, 17);
+            this.textBox7.Margin = new System.Windows.Forms.Padding(2);
+            this.textBox7.Name = "textBox7";
+            this.textBox7.Size = new System.Drawing.Size(311, 20);
+            this.textBox7.TabIndex = 25;
+            this.textBox7.Text = "\\\\192.168.0.20\\Sharing Company\\Personnel\\Dehghani\\Cert\\SinadSecure.bak";
             // 
             // label17
             // 
@@ -322,6 +383,7 @@
             this.textBox8.Name = "textBox8";
             this.textBox8.Size = new System.Drawing.Size(314, 20);
             this.textBox8.TabIndex = 28;
+            this.textBox8.Text = "\\\\192.168.0.20\\Sharing Company\\Personnel\\Dehghani\\Cert\\MyServerCert.pvk";
             // 
             // button14
             // 
@@ -344,25 +406,6 @@
             this.label16.TabIndex = 26;
             this.label16.Text = "Database";
             // 
-            // textBox7
-            // 
-            this.textBox7.Location = new System.Drawing.Point(98, 158);
-            this.textBox7.Margin = new System.Windows.Forms.Padding(2);
-            this.textBox7.Name = "textBox7";
-            this.textBox7.Size = new System.Drawing.Size(314, 20);
-            this.textBox7.TabIndex = 25;
-            // 
-            // button13
-            // 
-            this.button13.Location = new System.Drawing.Point(416, 154);
-            this.button13.Margin = new System.Windows.Forms.Padding(2);
-            this.button13.Name = "button13";
-            this.button13.Size = new System.Drawing.Size(63, 26);
-            this.button13.TabIndex = 24;
-            this.button13.Text = "Browse";
-            this.button13.UseVisualStyleBackColor = true;
-            this.button13.Click += new System.EventHandler(this.Button13_Click);
-            // 
             // label15
             // 
             this.label15.AutoSize = true;
@@ -380,6 +423,7 @@
             this.textBox6.Name = "textBox6";
             this.textBox6.Size = new System.Drawing.Size(314, 20);
             this.textBox6.TabIndex = 22;
+            this.textBox6.Text = "\\\\192.168.0.20\\Sharing Company\\Personnel\\Dehghani\\Cert\\MyServerCert.cer";
             // 
             // button12
             // 
@@ -406,7 +450,7 @@
             // 
             this.button9.BackColor = System.Drawing.SystemColors.Control;
             this.button9.Font = new System.Drawing.Font("Algerian", 21.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button9.Location = new System.Drawing.Point(225, 193);
+            this.button9.Location = new System.Drawing.Point(211, 219);
             this.button9.Margin = new System.Windows.Forms.Padding(2);
             this.button9.Name = "button9";
             this.button9.Size = new System.Drawing.Size(161, 47);
@@ -422,6 +466,7 @@
             this.textBox2.Name = "textBox2";
             this.textBox2.Size = new System.Drawing.Size(314, 20);
             this.textBox2.TabIndex = 1;
+            this.textBox2.Text = "\\\\192.168.0.20\\Sharing Company\\Personnel\\Dehghani\\Cert\\MasterKey.key";
             this.textBox2.TextChanged += new System.EventHandler(this.TextBox2_TextChanged);
             // 
             // button3
@@ -451,7 +496,7 @@
             this.tabPage5.Location = new System.Drawing.Point(4, 22);
             this.tabPage5.Margin = new System.Windows.Forms.Padding(2);
             this.tabPage5.Name = "tabPage5";
-            this.tabPage5.Size = new System.Drawing.Size(644, 259);
+            this.tabPage5.Size = new System.Drawing.Size(644, 278);
             this.tabPage5.TabIndex = 4;
             this.tabPage5.Text = "EncryptConfig";
             this.tabPage5.UseVisualStyleBackColor = true;
@@ -721,6 +766,7 @@
             // panel2
             // 
             this.panel2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel2.Controls.Add(this.button10);
             this.panel2.Controls.Add(this.button6);
             this.panel2.Controls.Add(this.TinyCode);
             this.panel2.Location = new System.Drawing.Point(20, 5);
@@ -728,6 +774,16 @@
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(646, 52);
             this.panel2.TabIndex = 18;
+            // 
+            // button10
+            // 
+            this.button10.Location = new System.Drawing.Point(496, 10);
+            this.button10.Name = "button10";
+            this.button10.Size = new System.Drawing.Size(75, 23);
+            this.button10.TabIndex = 23;
+            this.button10.Text = "button10";
+            this.button10.UseVisualStyleBackColor = true;
+            this.button10.Click += new System.EventHandler(this.button10_Click_1);
             // 
             // openFileDialog1
             // 
@@ -790,6 +846,8 @@
             this.groupBox1.PerformLayout();
             this.tabPage3.ResumeLayout(false);
             this.tabPage3.PerformLayout();
+            this.panel4.ResumeLayout(false);
+            this.panel4.PerformLayout();
             this.tabPage5.ResumeLayout(false);
             this.tabPage5.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Tn)).EndInit();
@@ -866,6 +924,10 @@
         private System.Windows.Forms.Label label19;
         private System.Windows.Forms.Label label21;
         private System.Windows.Forms.Label label20;
+        private System.Windows.Forms.Panel panel4;
+        private System.Windows.Forms.RadioButton radioButton2;
+        private System.Windows.Forms.RadioButton radioButton1;
+        private System.Windows.Forms.Button button10;
     }
 }
 

@@ -31,8 +31,40 @@ namespace DBSec
         {
             await BackupCertificate(txt_ServerIP.Text, txt_DB.Text,
                                 Utility.ToInsecureString(Utility.DBPass),textBox1.Text);
+            await BackupDataBase(txt_ServerIP.Text, txt_DB.Text,
+                                Utility.ToInsecureString(Utility.DBPass), textBox1.Text);
         }
+        private async Task BackupDataBase(string IP, string DB, string pass, string pathToBackup)
+        {
+            var comomand = "";
+            var constr = Utility.MakeConnectionStr(IP, DB, pass);
+            var res = await Utility.TestDbConnection(constr);
+            if (res != "Ok")
+            {
+                MessageBox.Show("خطا در اتصال به دیتابیس " + res);
+                return;
+            }
+            using (SqlConnection conn = new SqlConnection(constr))
 
+            {
+
+                try
+                {
+                    await conn.OpenAsync();
+                    var comm = string.Format(@" use master; OPEN MASTER KEY DECRYPTION BY PASSWORD = '{0}';BACKUP DATABASE a TO DISK=N'{1}\test.bak';",pass,pathToBackup);
+                    SqlCommand command = new SqlCommand(comm, conn);
+                    command.ExecuteNonQuery();
+                    MessageBox.Show("Backup با موفقیت کپی شد");
+                    conn.Close();
+                }
+                catch (Exception ex)
+                {
+
+                    MessageBox.Show(ex.Message);
+                }
+            }
+
+        }
         private async Task BackupCertificate(string IP,string DB,string pass,string pathToBackup)
         {
             var constr = Utility.MakeConnectionStr(IP,DB,pass);
@@ -95,8 +127,7 @@ namespace DBSec
                                                       WITH ALGORITHM = AES_128
                                                       ENCRYPTION BY SERVER CERTIFICATE MyServerCert;  
                                                       ALTER DATABASE {1}
-                                                      SET ENCRYPTION ON;", pass, DB),
-                                                                    conn);
+                                                      SET ENCRYPTION ON;", pass, DB), conn);
                 //await conn.OpenAsync();
                 //await testcom.ExecuteNonQueryAsync();
                 //conn.Close();
@@ -115,20 +146,25 @@ namespace DBSec
             }
         }
 
-        private async Task RestoreCertificateAndDb(string IP, string DB, string pass,string masterKeyPath, string certificatePath,string privateKeyPath,string DbPath,string ldfPath)
+        private async Task RestoreCertificateAndDb(string IP, string DB, string pass,string masterKeyPath, string certificatePath,string privateKeyPath,string DbPath,string ldfPath,string fileType)
         {
 
 
             try
             {
                 
-                SqlConnection conn = new SqlConnection(Utility.MakeConnectionStr(IP, DB,
-                      pass));
-                string textCommad = string.Format(@"RESTORE MASTER KEY   
+                SqlConnection conn = new SqlConnection(Utility.MakeConnectionStr(IP, DB, pass));
+                string textCommad;
+                if (fileType == "mdf")
+                {
+
+                   textCommad = string.Format(@"use master;
+
+RESTORE MASTER KEY   
                               FROM FILE = N'{0}'   
-                              DECRYPTION BY PASSWORD = 'admin@123'   
-                              ENCRYPTION BY PASSWORD = 'admin@123';  
-                              OPEN MASTER KEY DECRYPTION BY PASSWORD = 'admin@123'  
+                              DECRYPTION BY PASSWORD = '{5}'   
+                              ENCRYPTION BY PASSWORD = '{5}';  
+                              OPEN MASTER KEY DECRYPTION BY PASSWORD = '{5}'  
                               use master;
                               create certificate MyServerCert
                               from file = N'{1}'
@@ -139,8 +175,27 @@ namespace DBSec
                               CREATE DATABASE Sinad   
                               ON (FILENAME = '{3}'),   
                                  (FILENAME = '{4}')   
-                              FOR ATTACH;", masterKeyPath,certificatePath,privateKeyPath,DbPath,ldfPath);
+                              FOR ATTACH;", masterKeyPath, certificatePath, privateKeyPath, DbPath, ldfPath,"admin@123");
+                }
+                else
+                {
+                    textCommad = string.Format(@"RESTORE MASTER KEY   
+                              FROM FILE = N'{0}'   
+                              DECRYPTION BY PASSWORD = '{4}'
+                              ENCRYPTION BY PASSWORD = '{4}';  
+                              OPEN MASTER KEY DECRYPTION BY PASSWORD = '{4}'  
+                              use master;
+                              create certificate MyServerCert
+                              from file = N'{1}'
+                              with private key
+                                    ( file = N'{2}'
+                                        , decryption by password = N'AReallyStr0ngK#y4You'
+                                    )
 
+RESTORE DATABASE Sinad
+
+FROM DISK = '{3}'", masterKeyPath, certificatePath, privateKeyPath, DbPath,pass);
+                }
                 SqlCommand command = new SqlCommand(textCommad, conn);
                 await conn.OpenAsync();
                 command.ExecuteNonQuery();
@@ -190,8 +245,8 @@ namespace DBSec
         }
         private void Form1_Load(object sender, EventArgs e)
         {
-
-            SecTab.Enabled = false;
+            radioButton2.Checked = true;
+            //SecTab.Enabled = false;
             panel1.Enabled=panel3.Enabled = false;
             label2.Text =label7.Text= label3.Text =label10.Text= label11.Text=label12.Text= label9.Text= label20.Text= label21.Text="";
         }
@@ -214,22 +269,25 @@ namespace DBSec
                 }
                 else
                 {
-                    var rawConstr = Utility.MakeConnectionStr(txt_ServerIP.Text, txt_DB.Text,
+                   
+                    var rawConstr ="provider=sqloledb.1;"+ Utility.MakeConnectionStr(txt_ServerIP.Text, txt_DB.Text,
                         Utility.ToInsecureString(Utility.DBPass));
-                    var res = await Utility.TestDbConnection(rawConstr);
-                    if (res != "Ok")
-                    {
-                        MessageBox.Show("خطا در اتصال به دیتابیس " + res);
-                        return;
-                    }
-                    var secure = Utility.ToSecureString(
-                        rawConstr);
+                    //var res = await Utility.TestDbConnection(rawConstr);
+                    //if (res != "Ok")
+                    //{
+                    //    MessageBox.Show("خطا در اتصال به دیتابیس " + res);
+                    //    return;
+                    //}
 
-                    string conStr = Utility.EncryptString(secure);
+                  
+
+                    string conStr = Utility.Encrypt(rawConstr);
+                
+
                     ConfigXmlDocument configXmlDocument = new ConfigXmlDocument();
                     configXmlDocument.Load(textBox3.Text);
                     var c = configXmlDocument.DocumentElement.GetElementsByTagName("appSettings").Item(0).ChildNodes;
-                    string contaiof;
+                  
                     bool found = false;
                     foreach (XmlNode node in configXmlDocument.DocumentElement.GetElementsByTagName("appSettings").Item(0).ChildNodes)
                     {
@@ -286,8 +344,8 @@ namespace DBSec
                 else
                 {
                     panel1.Enabled = true;
-                    Utility.DBPass = Utility.ToSecureString(result);
-                    Utility.entropy = System.Text.Encoding.Unicode.GetBytes(result);
+                    Utility.DBPass = Utility.ToSecureString(result.Trim());
+                    Utility.passPhrase = Utility.ToSecureString(result.Trim());
                    
                     button6.BackColor = Color.Green;
                     TinyCode.BackColor = Color.Lime;
@@ -305,7 +363,7 @@ namespace DBSec
 
         private void Txt_ServerIP_TextChanged(object sender, EventArgs e)
         {
-            SecTab.Enabled = false;
+            //SecTab.Enabled = false;
         }
 
         private async void Button8_Click(object sender, EventArgs e)
@@ -345,7 +403,7 @@ namespace DBSec
 
         private void Txt_DB_TextChanged(object sender, EventArgs e)
         {
-            SecTab.Enabled = false;
+           // SecTab.Enabled = false;
         }
 
         private async void Button7_Click(object sender, EventArgs e)
@@ -354,6 +412,7 @@ namespace DBSec
                                 Utility.ToInsecureString(Utility.DBPass));
             await BackupCertificate(txt_ServerIP.Text, txt_DB.Text,
                                 Utility.ToInsecureString(Utility.DBPass),textBox5.Text);
+
             label12.Text = "\u2714";
         }
 
@@ -409,7 +468,7 @@ namespace DBSec
 
         private void Button13_Click(object sender, EventArgs e)
         {
-            openFileDialog1.Filter = "DB files(*.mdf)|*.mdf";
+           
             var res= openFileDialog1.ShowDialog();
             if(res==DialogResult.OK)
                 textBox7.Text = openFileDialog1.FileName;
@@ -418,8 +477,10 @@ namespace DBSec
         private async void Button9_Click(object sender, EventArgs e)
         {
             var ldfpath =textBox7.Text.Remove(textBox7.Text.Length-3,3)+"ldf";
+            var filetype = "mdf";
+            if (radioButton1.Checked == true) filetype = "mdf"; else filetype = "bak";
             await RestoreCertificateAndDb(txt_ServerIP.Text,"master", Utility.ToInsecureString(Utility.DBPass),textBox2.Text
-                ,textBox6.Text,textBox8.Text,textBox7.Text,ldfpath);
+                ,textBox6.Text,textBox8.Text,textBox7.Text,ldfpath,filetype);
         }
 
         private void Button14_Click(object sender, EventArgs e)
@@ -432,7 +493,7 @@ namespace DBSec
 
         private async void button15_Click(object sender, EventArgs e)
         {
-            using (SqlConnection conn = new SqlConnection(Utility.MakeConnectionStr(txt_ServerIP.Text, "master", textBox4.Text)))
+            using (SqlConnection conn = new SqlConnection(Utility.MakeConnectionStr(txt_ServerIP.Text, txt_DB.Text, textBox4.Text)))
             {
                 try
                 {
@@ -511,6 +572,27 @@ namespace DBSec
             if (res == DialogResult.OK)
                 textBox3.Text = openFileDialog1.FileName;
 
+        }
+
+        private void radioButton1_CheckedChanged(object sender, EventArgs e)
+        {
+            openFileDialog1.Filter = "DB files(*.mdf)|*.mdf";
+        }
+
+        private void radioButton2_CheckedChanged(object sender, EventArgs e)
+        {
+            openFileDialog1.Filter = "Backup files(*.bak)|*.bak";
+        }
+
+        private void tabPage3_Click(object sender, EventArgs e)
+        {
+          
+        }
+
+        private void button10_Click_1(object sender, EventArgs e)
+        {
+            var str = "eqU4G5/Vuvwzc+DRnTCjB2YcangOex3rK3IsrzV7u0nZQQazYUv4xF/ENi8x4VZmI9kaYUcO0ov1syGYzMkmZLdKYQW7LN5MYmHS5n/j7d6pcrwdJ6fNpB+r+eXvfBVX732eW8z9Rn2hZDZ4S9poajznX5dclPQXIkqYLa33Y4L390uz7wStBTADAquUKJoCZa38uHK94cUiVbRRaEkRJnRqoQbsQpi+tI81qznlnZYALLY0USo9nKzBXZYYTQmL";
+            Debug.WriteLine(Utility.Decrypt(str));
         }
     }
 }
