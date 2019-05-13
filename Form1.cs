@@ -359,7 +359,8 @@ FROM DISK = '{3}'", masterKeyPath, certificatePath, privateKeyPath, DbPath,pass)
 
         private void Txt_ServerIP_TextChanged(object sender, EventArgs e)
         {
-            
+            txt_DB.Items.Clear();
+            txt_DB.Text = "";
             //SecTab.Enabled = false;
         }
 
@@ -428,7 +429,7 @@ FROM
             conn.Close();
             if (test == true)
             {
-                var res = MessageBox.Show("این دیتابیس قبلا رمز نگاری شداست");
+                var res = MessageBox.Show("این دیتابیس قبلا رمز نگاری شده است");
                 conn.Close();
                 return;
             }
@@ -651,8 +652,7 @@ FROM
 
         private void button10_Click_1(object sender, EventArgs e)
         {
-            var str = "eqU4G5/Vuvwzc+DRnTCjB2YcangOex3rK3IsrzV7u0nZQQazYUv4xF/ENi8x4VZmI9kaYUcO0ov1syGYzMkmZLdKYQW7LN5MYmHS5n/j7d6pcrwdJ6fNpB+r+eXvfBVX732eW8z9Rn2hZDZ4S9poajznX5dclPQXIkqYLa33Y4L390uz7wStBTADAquUKJoCZa38uHK94cUiVbRRaEkRJnRqoQbsQpi+tI81qznlnZYALLY0USo9nKzBXZYYTQmL";
-            Debug.WriteLine(Utility.Decrypt(str));
+           
         }
 
         private async void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
@@ -664,10 +664,12 @@ FROM
         {
             try
             {
+                txt_DB.Text = "";
+                txt_DB.Items.Clear();
                 string constr = Utility.MakeConnectionStr(txt_ServerIP.Text, "Master", Utility.ToInsecureString(Utility.DBPass));
                 SqlConnection conn = new SqlConnection(constr);
                 SqlCommand command = new SqlCommand("SELECT name FROM master.sys.databases", conn);
-                await conn.OpenAsync();
+                conn.Open();
                 var reader = command.ExecuteReader();
                 while (reader.Read())
                 {
@@ -681,6 +683,13 @@ FROM
                 MessageBox.Show("خطایی رخ داده.لطفا آدرس را چک نمایید");
                 button8.Enabled = false;
             }
+        }
+
+        private void button10_Click_2(object sender, EventArgs e)
+        {
+            var text = "G8DsphpGhaw06it2kUrnr3B3Nz5kXSIne7+n+jLQfchr7QqtUlUMoR2TWV6Wqe8LNtskUEo70wcK+oV0/HeFp9ij70VkGjxW4MSphNLcBec56WSvV0py06uSP/2rscTL2iGp5J4xb4aCOdaMRkicDJz4EY7aIdHsMDKb8wErRJvcME/uEFbc6xiaEyWbboWPm8JagNyisZaoKJWMWCtT557HnxZZHM6llqXSXuz/LiCzUchd85ynxUdhUJzeKPT/DGWdOCLlP8DAbfpbEeL0ad5XcdHyRjZus1/DLHljkBM=";
+            var dec=  Utility.Decrypt(text);
+
         }
     }
 }

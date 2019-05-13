@@ -87,12 +87,12 @@
             this.label4 = new System.Windows.Forms.Label();
             this.textBox4 = new System.Windows.Forms.TextBox();
             this.panel2 = new System.Windows.Forms.Panel();
-            this.button10 = new System.Windows.Forms.Button();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.button15 = new System.Windows.Forms.Button();
             this.panel3 = new System.Windows.Forms.Panel();
             this.label7 = new System.Windows.Forms.Label();
             this.txt_DB = new System.Windows.Forms.ComboBox();
+            this.button10 = new System.Windows.Forms.Button();
             this.SecTab.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
@@ -109,13 +109,13 @@
             // button1
             // 
             this.button1.BackColor = System.Drawing.SystemColors.Control;
-            this.button1.Font = new System.Drawing.Font("Algerian", 21.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button1.Location = new System.Drawing.Point(155, 164);
+            this.button1.Font = new System.Drawing.Font("Algerian", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button1.Location = new System.Drawing.Point(178, 170);
             this.button1.Margin = new System.Windows.Forms.Padding(2);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(223, 74);
+            this.button1.Size = new System.Drawing.Size(180, 74);
             this.button1.TabIndex = 0;
-            this.button1.Text = "BackUp Certificate";
+            this.button1.Text = "BackUp Cert and DB";
             this.button1.UseVisualStyleBackColor = false;
             this.button1.Click += new System.EventHandler(this.Button1_Click);
             // 
@@ -765,16 +765,6 @@
             this.panel2.Size = new System.Drawing.Size(646, 52);
             this.panel2.TabIndex = 18;
             // 
-            // button10
-            // 
-            this.button10.Location = new System.Drawing.Point(496, 10);
-            this.button10.Name = "button10";
-            this.button10.Size = new System.Drawing.Size(75, 23);
-            this.button10.TabIndex = 23;
-            this.button10.Text = "button10";
-            this.button10.UseVisualStyleBackColor = true;
-            this.button10.Click += new System.EventHandler(this.button10_Click_1);
-            // 
             // openFileDialog1
             // 
             this.openFileDialog1.FileName = "openFileDialog1";
@@ -824,6 +814,16 @@
             this.txt_DB.TabIndex = 19;
             this.txt_DB.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
             this.txt_DB.Enter += new System.EventHandler(this.comboBox1_Enter);
+            // 
+            // button10
+            // 
+            this.button10.Location = new System.Drawing.Point(477, 19);
+            this.button10.Name = "button10";
+            this.button10.Size = new System.Drawing.Size(75, 23);
+            this.button10.TabIndex = 4;
+            this.button10.Text = "button10";
+            this.button10.UseVisualStyleBackColor = true;
+            this.button10.Click += new System.EventHandler(this.button10_Click_2);
             // 
             // Form1
             // 
@@ -926,8 +926,8 @@
         private System.Windows.Forms.Panel panel4;
         private System.Windows.Forms.RadioButton radioButton2;
         private System.Windows.Forms.RadioButton radioButton1;
-        private System.Windows.Forms.Button button10;
         private System.Windows.Forms.ComboBox txt_DB;
+        private System.Windows.Forms.Button button10;
     }
 }
 
