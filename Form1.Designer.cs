@@ -92,7 +92,7 @@
             this.panel3 = new System.Windows.Forms.Panel();
             this.label7 = new System.Windows.Forms.Label();
             this.txt_DB = new System.Windows.Forms.ComboBox();
-            this.button10 = new System.Windows.Forms.Button();
+            this.label22 = new System.Windows.Forms.Label();
             this.SecTab.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
@@ -195,13 +195,13 @@
             // button7
             // 
             this.button7.BackColor = System.Drawing.SystemColors.Control;
-            this.button7.Font = new System.Drawing.Font("Algerian", 21.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button7.Font = new System.Drawing.Font("Algerian", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button7.Location = new System.Drawing.Point(238, 181);
             this.button7.Margin = new System.Windows.Forms.Padding(2);
             this.button7.Name = "button7";
-            this.button7.Size = new System.Drawing.Size(147, 55);
+            this.button7.Size = new System.Drawing.Size(174, 82);
             this.button7.TabIndex = 0;
-            this.button7.Text = "Encrypt";
+            this.button7.Text = "Encrypt and Backup";
             this.button7.UseVisualStyleBackColor = false;
             this.button7.Click += new System.EventHandler(this.Button7_Click);
             // 
@@ -756,7 +756,7 @@
             // panel2
             // 
             this.panel2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panel2.Controls.Add(this.button10);
+            this.panel2.Controls.Add(this.label22);
             this.panel2.Controls.Add(this.button6);
             this.panel2.Controls.Add(this.TinyCode);
             this.panel2.Location = new System.Drawing.Point(20, 5);
@@ -815,15 +815,16 @@
             this.txt_DB.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
             this.txt_DB.Enter += new System.EventHandler(this.comboBox1_Enter);
             // 
-            // button10
+            // label22
             // 
-            this.button10.Location = new System.Drawing.Point(477, 19);
-            this.button10.Name = "button10";
-            this.button10.Size = new System.Drawing.Size(75, 23);
-            this.button10.TabIndex = 4;
-            this.button10.Text = "button10";
-            this.button10.UseVisualStyleBackColor = true;
-            this.button10.Click += new System.EventHandler(this.button10_Click_2);
+            this.label22.AutoSize = true;
+            this.label22.Font = new System.Drawing.Font("B Zar", 12F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(178)));
+            this.label22.ForeColor = System.Drawing.Color.Red;
+            this.label22.Location = new System.Drawing.Point(440, 10);
+            this.label22.Name = "label22";
+            this.label22.Size = new System.Drawing.Size(61, 27);
+            this.label22.TabIndex = 23;
+            this.label22.Text = "label22";
             // 
             // Form1
             // 
@@ -927,7 +928,7 @@
         private System.Windows.Forms.RadioButton radioButton2;
         private System.Windows.Forms.RadioButton radioButton1;
         private System.Windows.Forms.ComboBox txt_DB;
-        private System.Windows.Forms.Button button10;
+        private System.Windows.Forms.Label label22;
     }
 }
 

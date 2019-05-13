@@ -34,7 +34,7 @@ namespace DBSec
             await BackupDataBase(txt_ServerIP.Text, txt_DB.Text,
                                 Utility.ToInsecureString(Utility.DBPass), textBox1.Text);
         }
-        private async Task BackupDataBase(string IP, string DB, string pass, string pathToBackup)
+        private async Task BackupDataBase(string IP, string DB, string pass, string pathToBackup,string pharmacyName)
         {
             var comomand = "";
             var constr = Utility.MakeConnectionStr(IP, DB, pass);
@@ -51,7 +51,7 @@ namespace DBSec
                 try
                 {
                     await conn.OpenAsync();
-                    var comm = string.Format(@" use master; OPEN MASTER KEY DECRYPTION BY PASSWORD = '{0}';BACKUP DATABASE a TO DISK=N'{1}\Sinad.bak';",pass,pathToBackup);
+                    var comm = string.Format(@" use master; OPEN MASTER KEY DECRYPTION BY PASSWORD = '{0}';BACKUP DATABASE {2} TO DISK=N'{1}\{3}.bak';",pass,pathToBackup,DB,pharmacyName);
                     SqlCommand command = new SqlCommand(comm, conn);
                     command.ExecuteNonQuery();
                     MessageBox.Show("Backup با موفقیت کپی شد");
@@ -65,7 +65,7 @@ namespace DBSec
             }
 
         }
-        private async Task BackupCertificate(string IP,string DB,string pass,string pathToBackup)
+        private async Task BackupCertificate(string IP,string DB,string pass,string pathToBackup,string pharmacyName)
         {
             var constr = Utility.MakeConnectionStr(IP,DB,pass);
             var res = await Utility.TestDbConnection(constr);
@@ -82,15 +82,15 @@ namespace DBSec
                 {
                     await conn.OpenAsync();
                     var comm = string.Format(@"use master;
-                                                    BACKUP CERTIFICATE MyServerCert TO FILE = N'{0}\MyServerCert.cer'
+                                                    BACKUP CERTIFICATE MyServerCert TO FILE = N'{0}\{1}.cer'
                                                     WITH PRIVATE KEY
-                                                    (FILE = N'{0}\MyServerCert.pvk',ENCRYPTION BY PASSWORD = N'AReallyStr0ngK#y4You')",
-                                                     pathToBackup);
+                                                    (FILE = N'{0}\{1}.pvk',ENCRYPTION BY PASSWORD = N'AReallyStr0ngK#y4You')",
+                                                     pathToBackup,pharmacyName);
                     SqlCommand command = new SqlCommand(comm, conn);
                     command.ExecuteNonQuery();
                     MessageBox.Show("certificate با موفقیت کپی شد");
-                    comm = string.Format(@"BACKUP MASTER KEY TO FILE = N'{0}\MasterKey.key'  ENCRYPTION BY PASSWORD = 'admin@123';",
-                        pathToBackup);
+                    comm = string.Format(@"BACKUP MASTER KEY TO FILE = N'{0}\{2}.key'  ENCRYPTION BY PASSWORD = '{1}';",
+                        pathToBackup,pass,pharmacyName);
                     command = new SqlCommand(comm, conn);
                     command.ExecuteNonQuery();
                     MessageBox.Show("Master Key با موفقیت کپی شد");
@@ -156,7 +156,7 @@ namespace DBSec
 
                    textCommad = string.Format(@"use master;
 
-RESTORE MASTER KEY   
+                              RESTORE MASTER KEY   
                               FROM FILE = N'{0}'   
                               DECRYPTION BY PASSWORD = '{5}'   
                               ENCRYPTION BY PASSWORD = '{5}';  
@@ -171,11 +171,12 @@ RESTORE MASTER KEY
                               CREATE DATABASE Sinad   
                               ON (FILENAME = '{3}'),   
                                  (FILENAME = '{4}')   
-                              FOR ATTACH;", masterKeyPath, certificatePath, privateKeyPath, DbPath, ldfPath,"admin@123");
+                              FOR ATTACH;", masterKeyPath, certificatePath, privateKeyPath, DbPath, ldfPath,pass);
                 }
                 else
                 {
-                    textCommad = string.Format(@"RESTORE MASTER KEY   
+                    textCommad = string.Format(@"use master;
+                              RESTORE MASTER KEY   
                               FROM FILE = N'{0}'   
                               DECRYPTION BY PASSWORD = '{4}'
                               ENCRYPTION BY PASSWORD = '{4}';  
@@ -188,9 +189,9 @@ RESTORE MASTER KEY
                                         , decryption by password = N'AReallyStr0ngK#y4You'
                                     )
 
-RESTORE DATABASE Sinad
+RESTORE DATABASE Sinad 
 
-FROM DISK = '{3}'", masterKeyPath, certificatePath, privateKeyPath, DbPath,pass);
+FROM DISK = '{3}' WITH REPLACE", masterKeyPath, certificatePath, privateKeyPath, DbPath,pass);
                 }
                 SqlCommand command = new SqlCommand(textCommad, conn);
                 await conn.OpenAsync();
@@ -229,9 +230,9 @@ FROM DISK = '{3}'", masterKeyPath, certificatePath, privateKeyPath, DbPath,pass)
                     Tn.UserPassWord = TinyCode.Text;
                     Tn.ShowTinyInfo = true;
                     if (Tn.DataPartition == "") return "error";
-                    var data = Tn.DataPartition.Split('@');
+                   // var data = Tn.DataPartition.Split('@');
 
-                    return data[1];
+                    return Tn.DataPartition;
                 }
                 else
                 {
@@ -243,8 +244,8 @@ FROM DISK = '{3}'", masterKeyPath, certificatePath, privateKeyPath, DbPath,pass)
         {
             radioButton2.Checked = true;
             //SecTab.Enabled = false;
-            button8.Enabled= panel1.Enabled=panel3.Enabled = false;
-            label2.Text =label7.Text= label3.Text =label10.Text= label11.Text=label12.Text= label9.Text= label20.Text= label21.Text="";
+             button8.Enabled= panel1.Enabled=panel3.Enabled = false;
+           label22.Text= label2.Text =label7.Text= label3.Text =label10.Text= label11.Text=label12.Text= label9.Text= label20.Text= label21.Text="";
         }
 
         private void Button2_Click(object sender, EventArgs e)
@@ -309,7 +310,7 @@ FROM DISK = '{3}'", masterKeyPath, certificatePath, privateKeyPath, DbPath,pass)
                     newnode.InnerText = textBox9.Text;
 
                     configXmlDocument.Save(textBox3.Text + ".client");
-                    label21.Text = "کانفیگ کلاینت با ساخته شد";
+                    label21.Text = "کانفیگ کلاینت ساخته شد";
 
                     label19.Text = "\u2714";
 
@@ -326,8 +327,11 @@ FROM DISK = '{3}'", masterKeyPath, certificatePath, privateKeyPath, DbPath,pass)
             
             try
             {
-                var result = await ReadFromTiny();
-
+                var dataOfTiny = (await ReadFromTiny()).Split('@');
+                Utility.PharmacyName =Utility.ToSecureString(dataOfTiny[0]);
+                var result = dataOfTiny[1];
+               // label22.Text = dataOfTiny[0];
+              
 
                 if (result == null || result == "error")
                 {
@@ -471,9 +475,9 @@ FROM
             await EncryptDB(txt_ServerIP.Text, txt_DB.Text,
                                 Utility.ToInsecureString(Utility.DBPass));
             await BackupCertificate(txt_ServerIP.Text, txt_DB.Text,
-                                Utility.ToInsecureString(Utility.DBPass),textBox5.Text);
+                                Utility.ToInsecureString(Utility.DBPass),textBox5.Text,Utility.ToInsecureString(Utility.PharmacyName));
             await BackupDataBase(txt_ServerIP.Text, txt_DB.Text,
-                               Utility.ToInsecureString(Utility.DBPass), textBox5.Text);
+                               Utility.ToInsecureString(Utility.DBPass), textBox5.Text, Utility.ToInsecureString(Utility.PharmacyName));
             label12.Text = "\u2714";
         }
 

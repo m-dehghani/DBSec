@@ -15,6 +15,7 @@ namespace DBSec
     class Utility
     {
         public static SecureString passPhrase; /*= System.Text.Encoding.Unicode.GetBytes("Salt Is Not A Password");*/
+        public static SecureString PharmacyName; 
         // 
         // //public static AxTiny Tn = new AxTiny();
         public static string MakeConnectionStr(string address, string db, string pass)
