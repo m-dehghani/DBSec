@@ -249,7 +249,7 @@ FROM DISK = '{3}' WITH REPLACE", masterKeyPath, certificatePath, privateKeyPath,
 
             radioButton2.Checked = true;
             SecTab.Enabled = false;
-            panel3.Enabled=  button8.Enabled= panel1.Enabled= false;
+           panel3.Enabled=  button8.Enabled= panel1.Enabled= false;
             label23.Text= label22.Text= label2.Text =label7.Text= label3.Text =label10.Text= label11.Text=label12.Text= label9.Text= label20.Text= label21.Text="";
            // pictureBox1.Location = new Point(0, 0);
             
@@ -571,7 +571,7 @@ FROM
                
                    
                    //// button8.BackColor = Color.Green;
-            await ChangePassAndRenameSa(txt_ServerIP.Text, txt_DB.Text, Utility.ToInsecureString(Utility.DBPass));
+            await ChangePassAndRenameSa(txt_ServerIP.Text, txt_DB.Text, textBox4.Text);
            
                 
                
@@ -719,6 +719,7 @@ WHERE sp.principal_id > 100
             catch (Exception ex)
             {
                 MessageBox.Show("خطایی رخ داده.لطفا آدرس را چک نمایید");
+                panel3.Enabled = true;
                 button8.Enabled = false;
             }
         }
@@ -735,13 +736,15 @@ WHERE sp.principal_id > 100
             await DisableAllUserButSa(txt_ServerIP.Text, txt_DB.Text, Utility.ToInsecureString(Utility.DBPass));
         }
 
-        private void button16_Click(object sender, EventArgs e)
+        private async void button16_Click(object sender, EventArgs e)
         {
-            
+            await PutMaintenancePlan(txt_ServerIP.Text, txt_DB.Text, Utility.ToInsecureString(Utility.DBPass),textBox11.Text,textBox10.Text);
         }
-        private async Task PutMaintenancePlan()
+        private async Task PutMaintenancePlan(string address,string db,string pass,string pathToBackUp,string mirrorBackUp)
         {
-            var textCommand =string.Format(@"USE msdb ;  
+            try
+            {
+                var textCommand = string.Format(@"USE msdb ;  
 EXEC dbo.sp_add_job  
     @job_name = N'Weekly Sinad Data Backup' ;  
 EXEC sp_add_jobstep  
@@ -753,7 +756,8 @@ EXEC sp_add_jobstep
     @retry_interval = 5 ;  
 EXEC dbo.sp_add_schedule  
     @schedule_name = N'RunWeekly',  
-    @freq_type = 8,  
+    @freq_type = 8, 
+    @freq_interval=1, 
     @active_start_time = 171500 ;  
 USE msdb ;  
 EXEC sp_attach_schedule  
@@ -776,17 +780,26 @@ EXEC sp_add_jobstep
 EXEC dbo.sp_add_schedule  
     @schedule_name = N'RunDaily',  
     @freq_type = 4,  
-    @active_start_time = 171500 ;  
+    @freq_interval=1,
+
+@active_start_time = 171500 ;  
 USE msdb ;  
   
 EXEC sp_attach_schedule  
-   @job_name = N'Dail Sinad Data Backup',  
+   @job_name = N'Daily Sinad Data Backup',  
    @schedule_name = N'RunDaily';  
   
 EXEC dbo.sp_add_jobserver  
-    @job_name = N'Daily Sinad Data Backup';  
-    ");
-            SqlCommand command = new SqlCommand();
+    @job_name = N'Daily Sinad Data Backup';");
+                SqlConnection conn = new SqlConnection(Utility.MakeConnectionStr(address, db, pass));
+                SqlCommand command = new SqlCommand(textCommand, conn);
+                await conn.OpenAsync();
+                command.ExecuteNonQuery();
+                conn.Close();
+                MessageBox.Show("با موفقیت انجام شد");
+            }
+            catch(Exception ex)
+            { MessageBox.Show(ex.Message); }
         }
 
         private void button18_Click(object sender, EventArgs e)
