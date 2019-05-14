@@ -16,12 +16,13 @@ namespace DBSec
     {
         public static SecureString passPhrase; /*= System.Text.Encoding.Unicode.GetBytes("Salt Is Not A Password");*/
         public static SecureString PharmacyName; 
+        
         // 
         // //public static AxTiny Tn = new AxTiny();
-        public static string MakeConnectionStr(string address, string db, string pass)
+        public static string MakeConnectionStr(string address, string db, string pass,string user="BastaniTeb")
 
         {
-            return string.Format(string.Format(@"Password={0};Persist Security Info=True;User ID=sa;Initial Catalog={1};Data Source={2}", pass.Trim(), db.Trim(), address.Trim()));
+            return string.Format(string.Format(@"Password={0};Persist Security Info=True;User ID={3};Initial Catalog={1};Data Source={2}", pass.Trim(), db.Trim(), address.Trim(),user));
         }
         public static async Task<string> TestDbConnection(string connstr)
         {

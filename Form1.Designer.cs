@@ -81,18 +81,28 @@
             this.button6 = new System.Windows.Forms.Button();
             this.TinyCode = new System.Windows.Forms.TextBox();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.txt_DB = new System.Windows.Forms.ComboBox();
             this.label10 = new System.Windows.Forms.Label();
             this.button8 = new System.Windows.Forms.Button();
             this.label11 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.textBox4 = new System.Windows.Forms.TextBox();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.label22 = new System.Windows.Forms.Label();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.button15 = new System.Windows.Forms.Button();
             this.panel3 = new System.Windows.Forms.Panel();
             this.label7 = new System.Windows.Forms.Label();
-            this.txt_DB = new System.Windows.Forms.ComboBox();
-            this.label22 = new System.Windows.Forms.Label();
+            this.button10 = new System.Windows.Forms.Button();
+            this.label23 = new System.Windows.Forms.Label();
+            this.button16 = new System.Windows.Forms.Button();
+            this.tabPage4 = new System.Windows.Forms.TabPage();
+            this.label24 = new System.Windows.Forms.Label();
+            this.textBox10 = new System.Windows.Forms.TextBox();
+            this.button17 = new System.Windows.Forms.Button();
+            this.label25 = new System.Windows.Forms.Label();
+            this.textBox11 = new System.Windows.Forms.TextBox();
+            this.button18 = new System.Windows.Forms.Button();
             this.SecTab.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
@@ -104,13 +114,14 @@
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.panel3.SuspendLayout();
+            this.tabPage4.SuspendLayout();
             this.SuspendLayout();
             // 
             // button1
             // 
             this.button1.BackColor = System.Drawing.SystemColors.Control;
             this.button1.Font = new System.Drawing.Font("Algerian", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button1.Location = new System.Drawing.Point(178, 170);
+            this.button1.Location = new System.Drawing.Point(168, 167);
             this.button1.Margin = new System.Windows.Forms.Padding(2);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(180, 74);
@@ -125,6 +136,7 @@
             this.SecTab.Controls.Add(this.tabPage2);
             this.SecTab.Controls.Add(this.tabPage3);
             this.SecTab.Controls.Add(this.tabPage5);
+            this.SecTab.Controls.Add(this.tabPage4);
             this.SecTab.Location = new System.Drawing.Point(17, 199);
             this.SecTab.Margin = new System.Windows.Forms.Padding(2);
             this.SecTab.Name = "SecTab";
@@ -196,7 +208,7 @@
             // 
             this.button7.BackColor = System.Drawing.SystemColors.Control;
             this.button7.Font = new System.Drawing.Font("Algerian", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button7.Location = new System.Drawing.Point(238, 181);
+            this.button7.Location = new System.Drawing.Point(208, 169);
             this.button7.Margin = new System.Windows.Forms.Padding(2);
             this.button7.Name = "button7";
             this.button7.Size = new System.Drawing.Size(174, 82);
@@ -325,7 +337,7 @@
             // radioButton2
             // 
             this.radioButton2.AutoSize = true;
-            this.radioButton2.Location = new System.Drawing.Point(19, 30);
+            this.radioButton2.Location = new System.Drawing.Point(19, 3);
             this.radioButton2.Name = "radioButton2";
             this.radioButton2.Size = new System.Drawing.Size(46, 17);
             this.radioButton2.TabIndex = 27;
@@ -337,7 +349,7 @@
             // radioButton1
             // 
             this.radioButton1.AutoSize = true;
-            this.radioButton1.Location = new System.Drawing.Point(19, 7);
+            this.radioButton1.Location = new System.Drawing.Point(19, 26);
             this.radioButton1.Name = "radioButton1";
             this.radioButton1.Size = new System.Drawing.Size(45, 17);
             this.radioButton1.TabIndex = 26;
@@ -642,7 +654,7 @@
             // 
             // txt_ServerIP
             // 
-            this.txt_ServerIP.Location = new System.Drawing.Point(89, 15);
+            this.txt_ServerIP.Location = new System.Drawing.Point(89, 18);
             this.txt_ServerIP.Margin = new System.Windows.Forms.Padding(2);
             this.txt_ServerIP.Name = "txt_ServerIP";
             this.txt_ServerIP.Size = new System.Drawing.Size(121, 22);
@@ -681,6 +693,8 @@
             // panel1
             // 
             this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel1.Controls.Add(this.label23);
+            this.panel1.Controls.Add(this.button10);
             this.panel1.Controls.Add(this.txt_DB);
             this.panel1.Controls.Add(this.label10);
             this.panel1.Controls.Add(this.button8);
@@ -691,8 +705,18 @@
             this.panel1.Location = new System.Drawing.Point(20, 61);
             this.panel1.Margin = new System.Windows.Forms.Padding(2);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(285, 125);
+            this.panel1.Size = new System.Drawing.Size(355, 125);
             this.panel1.TabIndex = 17;
+            // 
+            // txt_DB
+            // 
+            this.txt_DB.FormattingEnabled = true;
+            this.txt_DB.Location = new System.Drawing.Point(89, 50);
+            this.txt_DB.Name = "txt_DB";
+            this.txt_DB.Size = new System.Drawing.Size(120, 24);
+            this.txt_DB.TabIndex = 19;
+            this.txt_DB.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
+            this.txt_DB.Enter += new System.EventHandler(this.comboBox1_Enter);
             // 
             // label10
             // 
@@ -711,10 +735,10 @@
             // 
             this.button8.BackColor = System.Drawing.SystemColors.Control;
             this.button8.Font = new System.Drawing.Font("Palatino Linotype", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button8.Location = new System.Drawing.Point(89, 84);
+            this.button8.Location = new System.Drawing.Point(89, 82);
             this.button8.Margin = new System.Windows.Forms.Padding(2);
             this.button8.Name = "button8";
-            this.button8.Size = new System.Drawing.Size(116, 36);
+            this.button8.Size = new System.Drawing.Size(121, 36);
             this.button8.TabIndex = 17;
             this.button8.Text = "Test DB";
             this.button8.UseVisualStyleBackColor = false;
@@ -750,7 +774,7 @@
             this.textBox4.Margin = new System.Windows.Forms.Padding(2);
             this.textBox4.Name = "textBox4";
             this.textBox4.PasswordChar = '*';
-            this.textBox4.Size = new System.Drawing.Size(194, 20);
+            this.textBox4.Size = new System.Drawing.Size(147, 20);
             this.textBox4.TabIndex = 4;
             // 
             // panel2
@@ -765,56 +789,6 @@
             this.panel2.Size = new System.Drawing.Size(646, 52);
             this.panel2.TabIndex = 18;
             // 
-            // openFileDialog1
-            // 
-            this.openFileDialog1.FileName = "openFileDialog1";
-            // 
-            // button15
-            // 
-            this.button15.BackColor = System.Drawing.SystemColors.Control;
-            this.button15.Font = new System.Drawing.Font("Times New Roman", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button15.Location = new System.Drawing.Point(105, 83);
-            this.button15.Name = "button15";
-            this.button15.Size = new System.Drawing.Size(158, 40);
-            this.button15.TabIndex = 21;
-            this.button15.Text = "Change PASS And Disable All Users";
-            this.button15.UseVisualStyleBackColor = false;
-            this.button15.Click += new System.EventHandler(this.button15_Click);
-            // 
-            // panel3
-            // 
-            this.panel3.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panel3.Controls.Add(this.label7);
-            this.panel3.Controls.Add(this.button15);
-            this.panel3.Controls.Add(this.label11);
-            this.panel3.Controls.Add(this.textBox4);
-            this.panel3.Controls.Add(this.label4);
-            this.panel3.Location = new System.Drawing.Point(310, 62);
-            this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(356, 124);
-            this.panel3.TabIndex = 19;
-            // 
-            // label7
-            // 
-            this.label7.AutoSize = true;
-            this.label7.Font = new System.Drawing.Font("B Zar", 15.75F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(178)));
-            this.label7.ForeColor = System.Drawing.Color.Red;
-            this.label7.Location = new System.Drawing.Point(134, 2);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(77, 35);
-            this.label7.TabIndex = 22;
-            this.label7.Text = "label7";
-            // 
-            // txt_DB
-            // 
-            this.txt_DB.FormattingEnabled = true;
-            this.txt_DB.Location = new System.Drawing.Point(90, 50);
-            this.txt_DB.Name = "txt_DB";
-            this.txt_DB.Size = new System.Drawing.Size(120, 24);
-            this.txt_DB.TabIndex = 19;
-            this.txt_DB.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
-            this.txt_DB.Enter += new System.EventHandler(this.comboBox1_Enter);
-            // 
             // label22
             // 
             this.label22.AutoSize = true;
@@ -826,11 +800,159 @@
             this.label22.TabIndex = 23;
             this.label22.Text = "label22";
             // 
+            // openFileDialog1
+            // 
+            this.openFileDialog1.FileName = "openFileDialog1";
+            // 
+            // button15
+            // 
+            this.button15.BackColor = System.Drawing.SystemColors.Control;
+            this.button15.Font = new System.Drawing.Font("Times New Roman", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button15.Location = new System.Drawing.Point(96, 81);
+            this.button15.Name = "button15";
+            this.button15.Size = new System.Drawing.Size(147, 40);
+            this.button15.TabIndex = 21;
+            this.button15.Text = "Change sa password and name ";
+            this.button15.UseVisualStyleBackColor = false;
+            this.button15.Click += new System.EventHandler(this.button15_Click);
+            // 
+            // panel3
+            // 
+            this.panel3.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel3.Controls.Add(this.label7);
+            this.panel3.Controls.Add(this.button15);
+            this.panel3.Controls.Add(this.label11);
+            this.panel3.Controls.Add(this.textBox4);
+            this.panel3.Controls.Add(this.label4);
+            this.panel3.Location = new System.Drawing.Point(380, 62);
+            this.panel3.Name = "panel3";
+            this.panel3.Size = new System.Drawing.Size(286, 124);
+            this.panel3.TabIndex = 19;
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Font = new System.Drawing.Font("B Zar", 15.75F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(178)));
+            this.label7.ForeColor = System.Drawing.Color.Red;
+            this.label7.Location = new System.Drawing.Point(90, 2);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(77, 35);
+            this.label7.TabIndex = 22;
+            this.label7.Text = "label7";
+            // 
+            // button10
+            // 
+            this.button10.Location = new System.Drawing.Point(220, 91);
+            this.button10.Name = "button10";
+            this.button10.Size = new System.Drawing.Size(118, 27);
+            this.button10.TabIndex = 23;
+            this.button10.Text = "Disable All Users";
+            this.button10.UseVisualStyleBackColor = true;
+            this.button10.Click += new System.EventHandler(this.button10_Click_3);
+            // 
+            // label23
+            // 
+            this.label23.AutoSize = true;
+            this.label23.BackColor = System.Drawing.SystemColors.ButtonFace;
+            this.label23.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label23.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
+            this.label23.Location = new System.Drawing.Point(253, 75);
+            this.label23.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label23.Name = "label23";
+            this.label23.Size = new System.Drawing.Size(48, 13);
+            this.label23.TabIndex = 24;
+            this.label23.Text = "label23";
+            // 
+            // button16
+            // 
+            this.button16.Location = new System.Drawing.Point(239, 197);
+            this.button16.Name = "button16";
+            this.button16.Size = new System.Drawing.Size(136, 51);
+            this.button16.TabIndex = 25;
+            this.button16.Text = "Maintenance Plan";
+            this.button16.UseVisualStyleBackColor = true;
+            this.button16.Click += new System.EventHandler(this.button16_Click);
+            // 
+            // tabPage4
+            // 
+            this.tabPage4.Controls.Add(this.label24);
+            this.tabPage4.Controls.Add(this.textBox10);
+            this.tabPage4.Controls.Add(this.button17);
+            this.tabPage4.Controls.Add(this.label25);
+            this.tabPage4.Controls.Add(this.textBox11);
+            this.tabPage4.Controls.Add(this.button18);
+            this.tabPage4.Controls.Add(this.button16);
+            this.tabPage4.Location = new System.Drawing.Point(4, 22);
+            this.tabPage4.Name = "tabPage4";
+            this.tabPage4.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage4.Size = new System.Drawing.Size(644, 278);
+            this.tabPage4.TabIndex = 5;
+            this.tabPage4.Text = "Maintenance Plan";
+            this.tabPage4.UseVisualStyleBackColor = true;
+            // 
+            // label24
+            // 
+            this.label24.AutoSize = true;
+            this.label24.Location = new System.Drawing.Point(124, 99);
+            this.label24.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label24.Name = "label24";
+            this.label24.Size = new System.Drawing.Size(33, 13);
+            this.label24.TabIndex = 35;
+            this.label24.Text = "Mirror";
+            // 
+            // textBox10
+            // 
+            this.textBox10.Location = new System.Drawing.Point(126, 115);
+            this.textBox10.Margin = new System.Windows.Forms.Padding(2);
+            this.textBox10.Name = "textBox10";
+            this.textBox10.Size = new System.Drawing.Size(314, 20);
+            this.textBox10.TabIndex = 34;
+            // 
+            // button17
+            // 
+            this.button17.Location = new System.Drawing.Point(444, 111);
+            this.button17.Margin = new System.Windows.Forms.Padding(2);
+            this.button17.Name = "button17";
+            this.button17.Size = new System.Drawing.Size(63, 26);
+            this.button17.TabIndex = 33;
+            this.button17.Text = "Browse";
+            this.button17.UseVisualStyleBackColor = true;
+            this.button17.Click += new System.EventHandler(this.button17_Click);
+            // 
+            // label25
+            // 
+            this.label25.AutoSize = true;
+            this.label25.Location = new System.Drawing.Point(124, 57);
+            this.label25.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label25.Name = "label25";
+            this.label25.Size = new System.Drawing.Size(81, 13);
+            this.label25.TabIndex = 32;
+            this.label25.Text = "Path to Backup";
+            // 
+            // textBox11
+            // 
+            this.textBox11.Location = new System.Drawing.Point(126, 73);
+            this.textBox11.Margin = new System.Windows.Forms.Padding(2);
+            this.textBox11.Name = "textBox11";
+            this.textBox11.Size = new System.Drawing.Size(314, 20);
+            this.textBox11.TabIndex = 31;
+            // 
+            // button18
+            // 
+            this.button18.Location = new System.Drawing.Point(444, 69);
+            this.button18.Margin = new System.Windows.Forms.Padding(2);
+            this.button18.Name = "button18";
+            this.button18.Size = new System.Drawing.Size(63, 26);
+            this.button18.TabIndex = 30;
+            this.button18.Text = "Browse";
+            this.button18.UseVisualStyleBackColor = true;
+            this.button18.Click += new System.EventHandler(this.button18_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(678, 514);
+            this.ClientSize = new System.Drawing.Size(678, 505);
             this.Controls.Add(this.panel3);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.panel1);
@@ -858,6 +980,8 @@
             this.panel2.PerformLayout();
             this.panel3.ResumeLayout(false);
             this.panel3.PerformLayout();
+            this.tabPage4.ResumeLayout(false);
+            this.tabPage4.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -929,6 +1053,16 @@
         private System.Windows.Forms.RadioButton radioButton1;
         private System.Windows.Forms.ComboBox txt_DB;
         private System.Windows.Forms.Label label22;
+        private System.Windows.Forms.Button button10;
+        private System.Windows.Forms.Label label23;
+        private System.Windows.Forms.Button button16;
+        private System.Windows.Forms.TabPage tabPage4;
+        private System.Windows.Forms.Label label24;
+        private System.Windows.Forms.TextBox textBox10;
+        private System.Windows.Forms.Button button17;
+        private System.Windows.Forms.Label label25;
+        private System.Windows.Forms.TextBox textBox11;
+        private System.Windows.Forms.Button button18;
     }
 }
 

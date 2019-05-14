@@ -59,5 +59,15 @@ namespace DBSec.Properties {
                 resourceCulture = value;
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap d_helix_css_gif__50fps_selective__1a {
+            get {
+                object obj = ResourceManager.GetObject("d_helix-css-gif-_50fps-selective_-1a", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
     }
 }

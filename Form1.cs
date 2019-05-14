@@ -30,9 +30,9 @@ namespace DBSec
         private async void Button1_Click(object sender, EventArgs e)
         {
             await BackupCertificate(txt_ServerIP.Text, txt_DB.Text,
-                                Utility.ToInsecureString(Utility.DBPass),textBox1.Text);
+                                Utility.ToInsecureString(Utility.DBPass),textBox1.Text,Utility.ToInsecureString(Utility.PharmacyName));
             await BackupDataBase(txt_ServerIP.Text, txt_DB.Text,
-                                Utility.ToInsecureString(Utility.DBPass), textBox1.Text);
+                                Utility.ToInsecureString(Utility.DBPass), textBox1.Text,Utility.ToInsecureString(Utility.PharmacyName));
         }
         private async Task BackupDataBase(string IP, string DB, string pass, string pathToBackup,string pharmacyName)
         {
@@ -82,10 +82,11 @@ namespace DBSec
                 {
                     await conn.OpenAsync();
                     var comm = string.Format(@"use master;
-                                                    BACKUP CERTIFICATE MyServerCert TO FILE = N'{0}\{1}.cer'
+ OPEN MASTER KEY DECRYPTION BY PASSWORD = '{2}';                                                    
+BACKUP CERTIFICATE MyServerCert TO FILE = N'{0}\{1}.cer'
                                                     WITH PRIVATE KEY
                                                     (FILE = N'{0}\{1}.pvk',ENCRYPTION BY PASSWORD = N'AReallyStr0ngK#y4You')",
-                                                     pathToBackup,pharmacyName);
+                                                     pathToBackup,pharmacyName,pass);
                     SqlCommand command = new SqlCommand(comm, conn);
                     command.ExecuteNonQuery();
                     MessageBox.Show("certificate با موفقیت کپی شد");
@@ -242,10 +243,17 @@ FROM DISK = '{3}' WITH REPLACE", masterKeyPath, certificatePath, privateKeyPath,
         }
         private void Form1_Load(object sender, EventArgs e)
         {
+            // Bitmap image = new Bitmap(@"C:\Users\Administrator\Downloads\d_helix-css-gif-_50fps-selective_-1a.gif");
+            //image.MakeTransparent();
+            //pictureBox1.Image = image;
+
             radioButton2.Checked = true;
-            //SecTab.Enabled = false;
-             button8.Enabled= panel1.Enabled=panel3.Enabled = false;
-           label22.Text= label2.Text =label7.Text= label3.Text =label10.Text= label11.Text=label12.Text= label9.Text= label20.Text= label21.Text="";
+            SecTab.Enabled = false;
+            panel3.Enabled=  button8.Enabled= panel1.Enabled= false;
+            label23.Text= label22.Text= label2.Text =label7.Text= label3.Text =label10.Text= label11.Text=label12.Text= label9.Text= label20.Text= label21.Text="";
+           // pictureBox1.Location = new Point(0, 0);
+            
+
         }
 
         private void Button2_Click(object sender, EventArgs e)
@@ -338,7 +346,7 @@ FROM DISK = '{3}' WITH REPLACE", masterKeyPath, certificatePath, privateKeyPath,
                     panel1.Enabled = false;
                     MessageBox.Show("خطا در خواندن");
                     TinyCode.BackColor = Color.Red;
-
+                    SecTab.Enabled = false;
                     button6.BackColor = Color.Red;
                 }
                 else
@@ -346,7 +354,8 @@ FROM DISK = '{3}' WITH REPLACE", masterKeyPath, certificatePath, privateKeyPath,
                     panel1.Enabled = true;
                     Utility.DBPass = Utility.ToSecureString(result.Trim());
                     Utility.passPhrase = Utility.ToSecureString(result.Trim());
-                   
+                    SecTab.Enabled = true;
+                    panel3.Enabled = false;
                     button6.BackColor = Color.Green;
                     TinyCode.BackColor = Color.Lime;
 
@@ -533,7 +542,7 @@ FROM
 
         private void Button13_Click(object sender, EventArgs e)
         {
-           
+            openFileDialog1.Filter = "bak files(*.bak)|*.bak";
             var res= openFileDialog1.ShowDialog();
             if(res==DialogResult.OK)
                 textBox7.Text = openFileDialog1.FileName;
@@ -558,45 +567,49 @@ FROM
 
         private async void button15_Click(object sender, EventArgs e)
         {
-            using (SqlConnection conn = new SqlConnection(Utility.MakeConnectionStr(txt_ServerIP.Text, txt_DB.Text, textBox4.Text)))
-            {
-                try
-                {
-                    conn.Open();
-                    SqlCommand comm = new SqlCommand(
-
-                      string.Format(@"ALTER LOGIN [sa] WITH PASSWORD='{0}';ALTER LOGIN sa WITH DEFAULT_DATABASE = [master];", Utility.ToInsecureString(Utility.DBPass)), conn);
-
-
-                    comm.ExecuteNonQuery();
-                    textBox4.BackColor = Color.Lime;
-                    label11.Text = "\u2714";
-
-                    conn.Close();
-                    button8.BackColor = Color.Green;
-                    await DisableAllUserButSa(txt_ServerIP.Text, txt_DB.Text, Utility.ToInsecureString(Utility.DBPass));
-                }
-                catch (Exception ex)
-                {
-
-                    textBox4.BackColor = Color.Red;
-
-                    MessageBox.Show(ex.Message);
-
-                }
-            }
+            
+               
+                   
+                   //// button8.BackColor = Color.Green;
+            await ChangePassAndRenameSa(txt_ServerIP.Text, txt_DB.Text, Utility.ToInsecureString(Utility.DBPass));
+           
+                
+               
+          
 
         }
+        private async Task ChangePassAndRenameSa(string address, string db, string pass)
+        {
+            try
+            {
+                SqlConnection conn = new SqlConnection(Utility.MakeConnectionStr(address, db, pass, "sa"));
+                conn.Open();
+                SqlCommand comm = new SqlCommand(
 
+                  string.Format(@"USE MASTER
+                                  ALTER LOGIN sa WITH NAME = BastaniTeb,
+                                  PASSWORD = '{0}'; ", Utility.ToInsecureString(Utility.DBPass)), conn);
+
+
+                comm.ExecuteNonQuery();
+                textBox4.BackColor = Color.Lime;
+                label11.Text = "\u2714";
+
+                conn.Close();
+            }
+            catch(Exception ex) { MessageBox.Show(ex.Message); }
+
+        }
         public async Task DisableAllUserButSa(string address,string db,string pass)
         {
             try
             {
-                string strCommand = @"SELECT 'ALTER LOGIN ' + QUOTENAME(sp.name) + ' DISABLE;'
+                string strCommand =string.Format(@"SELECT 'use master;Deny connect to ' + QUOTENAME(sp.name) 
                                   FROM sys.server_principals sp
                                   WHERE sp.principal_id > 100   
                                   AND sp.is_disabled = 0
-                                  AND sp.type IN ( 'U'   , 'S'  ) ;";
+                                  AND sp.type IN ('G','s','u') and name<> '##MS_PolicyTsqlExecutionLogin##' ;", db);
+             
                 SqlConnection conn = new SqlConnection(Utility.MakeConnectionStr(address, db, pass));
                 
                 SqlCommand command = new SqlCommand(strCommand, conn);
@@ -609,6 +622,25 @@ FROM
                     commands.Add(reader[0].ToString());
                    
                 }
+                strCommand = string.Format(@"SELECT 'use master;ALTER LOGIN ' + QUOTENAME(sp.name) + ' DISABLE;'
+FROM sys.server_principals sp
+WHERE sp.principal_id > 100
+    AND sp.is_disabled = 0
+    AND sp.type IN (
+        'U'
+         
+        , 'S' 
+        );");
+                command = new SqlCommand(strCommand, conn);
+                reader.Close();
+                reader = command.ExecuteReader();
+
+               
+                while (reader.Read())
+                {
+                    commands.Add(reader[0].ToString());
+
+                }
                 conn.Close();
                 conn.Open();
                 SqlCommand alterLoginCommand;
@@ -619,6 +651,8 @@ FROM
                 });
 
                 
+                
+                label23.Text = "\u2714";
                 MessageBox.Show("تمامی کاربران غیرفعال شدند");
                 conn.Close();
             }catch(Exception ex)
@@ -694,6 +728,82 @@ FROM
             var text = "G8DsphpGhaw06it2kUrnr3B3Nz5kXSIne7+n+jLQfchr7QqtUlUMoR2TWV6Wqe8LNtskUEo70wcK+oV0/HeFp9ij70VkGjxW4MSphNLcBec56WSvV0py06uSP/2rscTL2iGp5J4xb4aCOdaMRkicDJz4EY7aIdHsMDKb8wErRJvcME/uEFbc6xiaEyWbboWPm8JagNyisZaoKJWMWCtT557HnxZZHM6llqXSXuz/LiCzUchd85ynxUdhUJzeKPT/DGWdOCLlP8DAbfpbEeL0ad5XcdHyRjZus1/DLHljkBM=";
             var dec=  Utility.Decrypt(text);
 
+        }
+
+        private async void button10_Click_3(object sender, EventArgs e)
+        {
+            await DisableAllUserButSa(txt_ServerIP.Text, txt_DB.Text, Utility.ToInsecureString(Utility.DBPass));
+        }
+
+        private void button16_Click(object sender, EventArgs e)
+        {
+            
+        }
+        private async Task PutMaintenancePlan()
+        {
+            var textCommand =string.Format(@"USE msdb ;  
+EXEC dbo.sp_add_job  
+    @job_name = N'Weekly Sinad Data Backup' ;  
+EXEC sp_add_jobstep  
+    @job_name = N'Weekly Sinad Data Backup',  
+    @step_name = N'Set database to read only',  
+    @subsystem = N'TSQL',  
+    @command = N'BACKUP DATABASE Sinad TO DISK=''d:\\ertest.bak''',   
+    @retry_attempts = 5,  
+    @retry_interval = 5 ;  
+EXEC dbo.sp_add_schedule  
+    @schedule_name = N'RunWeekly',  
+    @freq_type = 8,  
+    @active_start_time = 171500 ;  
+USE msdb ;  
+EXEC sp_attach_schedule  
+   @job_name = N'Weekly Sinad Data Backup',  
+   @schedule_name = N'RunWeekly';  
+EXEC dbo.sp_add_jobserver  
+    @job_name = N'Weekly Sinad Data Backup';  
+  
+EXEC dbo.sp_add_job  
+    @job_name = N'Daily Sinad Data Backup' ;  
+  
+EXEC sp_add_jobstep  
+    @job_name = N'Daily Sinad Data Backup',  
+    @step_name = N'Set database to read only',  
+    @subsystem = N'TSQL',  
+    @command = N'BACKUP DATABASE Sinad  TO DISK=''d:\\ertest.bak'' WITH DIFFERENTIAL',   
+    @retry_attempts = 5,  
+    @retry_interval = 5 ;  
+  
+EXEC dbo.sp_add_schedule  
+    @schedule_name = N'RunDaily',  
+    @freq_type = 4,  
+    @active_start_time = 171500 ;  
+USE msdb ;  
+  
+EXEC sp_attach_schedule  
+   @job_name = N'Dail Sinad Data Backup',  
+   @schedule_name = N'RunDaily';  
+  
+EXEC dbo.sp_add_jobserver  
+    @job_name = N'Daily Sinad Data Backup';  
+    ");
+            SqlCommand command = new SqlCommand();
+        }
+
+        private void button18_Click(object sender, EventArgs e)
+        {
+            if(folderBrowserDialog1.ShowDialog()!=DialogResult.Cancel )
+            {
+                textBox11.Text = folderBrowserDialog1.SelectedPath;
+            }
+
+        }
+
+        private void button17_Click(object sender, EventArgs e)
+        {
+            if (folderBrowserDialog1.ShowDialog() != DialogResult.Cancel)
+            {
+                textBox10.Text = folderBrowserDialog1.SelectedPath;
+            }
         }
     }
 }
