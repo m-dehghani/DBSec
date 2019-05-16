@@ -9,14 +9,19 @@ using AxTINYLib;
 using System.Data.SqlClient;
 using System.Threading.Tasks;
 using System.IO;
+using System.Net.Sockets;
+using System.Net;
 
 namespace DBSec
 {
     class Utility
     {
         public static SecureString passPhrase; /*= System.Text.Encoding.Unicode.GetBytes("Salt Is Not A Password");*/
-        public static SecureString PharmacyName; 
+        public static SecureString PharmacyName;
+       
         
+        public static string ftpAddress= "ftp://bastanisoft.ir/";
+
         // 
         // //public static AxTiny Tn = new AxTiny();
         public static string MakeConnectionStr(string address, string db, string pass,string user="BastaniTeb")
@@ -169,7 +174,109 @@ namespace DBSec
                 }
             }
         }
+        public static string CheckTheFtpConnection(string address, string userName = "Bastanis", string password = "y!3d@7L4EvfYG4")
+        {
+            try
+            {
+                using (WebClient client = new WebClient())
+                {
+                    client.Credentials = new NetworkCredential(userName, password);
+                    
+                    client.OpenRead(address);
+                    client.Dispose();
+                    return "Ok";
 
+                }
+            }
+            catch(Exception ex)
+            { return ex.Message; }
+        }
+
+        public static async Task<string> PutFileInFTP(string localFilePath, string password,string pharmacySerial, string address = "ftp://bastanisoft.ir/upload/", string userName = "Bastanis")
+        {
+
+            try
+            {
+                using (WebClient client = new WebClient())
+                {
+                    client.Credentials = new NetworkCredential(userName, password);
+                    
+                    string filename=localFilePath.Split('\\').Last();
+                    StringBuilder result = new StringBuilder();
+                    FtpWebRequest requestDir = (FtpWebRequest)WebRequest.Create(address);
+                    requestDir.Method = WebRequestMethods.Ftp.ListDirectory;
+                    requestDir.Credentials = new NetworkCredential(userName, password);
+
+                    FtpWebResponse responseDir = (FtpWebResponse)requestDir.GetResponse();
+                    StreamReader readerDir = new StreamReader(responseDir.GetResponseStream());
+
+                    string line = readerDir.ReadLine();
+
+                    while (line != null)
+                    {
+                        result.Append(line);
+                        result.Append("\n");
+                        line = readerDir.ReadLine();
+                    }
+
+                    var s= result.Remove(result.ToString().LastIndexOf('\n'), 1);
+                    responseDir.Close();
+                    if (result.ToString().Split('\n').Contains(pharmacySerial) == true)
+                        client.UploadFile(address + "/" + pharmacySerial +"/"+ filename, WebRequestMethods.Ftp.UploadFile, localFilePath);
+                    else
+                    {
+
+                        requestDir =(FtpWebRequest) WebRequest.Create(address+"/"+pharmacySerial);
+                        
+                        requestDir.Method = WebRequestMethods.Ftp.MakeDirectory;
+                        requestDir.Credentials = new NetworkCredential(userName, password);
+                        using (var resp = (FtpWebResponse)requestDir.GetResponse())
+                        {
+                           
+                            var statusCode = resp.StatusCode;
+                            if(statusCode==FtpStatusCode.PathnameCreated)
+                            {
+                                client.UploadFile(address + "/" + pharmacySerial +"/"+ filename, WebRequestMethods.Ftp.UploadFile, localFilePath);
+
+                            }else
+                            {
+                                return statusCode.ToString();
+                            }
+                        }
+                    }
+                    return filename+" با موفقیت بر روی هاست قرار گرفت";
+                }
+
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+
+            //StringBuilder result = new StringBuilder();
+            //FtpWebRequest requestDir = (FtpWebRequest)WebRequest.Create(address);
+            //requestDir.Method = WebRequestMethods.Ftp.ListDirectory;
+            //requestDir.Credentials = new NetworkCredential(user,password);
+
+            //FtpWebResponse responseDir = (FtpWebResponse)requestDir.GetResponse();
+            //StreamReader readerDir = new StreamReader(responseDir.GetResponseStream());
+
+            //string line = readerDir.ReadLine();
+            //while (line != null)
+            //{
+            //    result.Append(line);
+            //    result.Append("\n");
+            //    line = readerDir.ReadLine();
+            //}
+
+            //result.Remove(result.ToString().LastIndexOf('\n'), 1);
+            //responseDir.Close();
+            //if(result.ToString().Split('\n').Contains(folderName)==true)
+            //{
+
+            //}
+        }
+      
         private static byte[] Generate256BitsOfRandomEntropy()
         {
             var randomBytes = new byte[32]; // 32 Bytes will give us 256 bits.
@@ -179,6 +286,37 @@ namespace DBSec
                 rngCsp.GetBytes(randomBytes);
             }
             return randomBytes;
+        }
+        public async static Task<string> MakeHash(string text)
+        {
+            byte[] salt;
+            new RNGCryptoServiceProvider().GetBytes(salt = new byte[16]);
+            var pbkdf2 = new Rfc2898DeriveBytes(text, salt, 10000);
+            byte[] hash = pbkdf2.GetBytes(20);
+            byte[] hashBytes = new byte[36];
+            Array.Copy(salt, 0, hashBytes, 0, 16);
+            Array.Copy(hash, 0, hashBytes, 16, 20);
+            string savedPasswordHash = Convert.ToBase64String(hashBytes);
+            return savedPasswordHash;
+
+        }
+        public async static Task<bool> VerifyHash(string password,string savedPasswordHash)
+        {
+            /* Fetch the stored value */
+           // string savedPasswordHash = DBContext.GetUser(u => u.UserName == user).Password;
+            /* Extract the bytes */
+            byte[] hashBytes = Convert.FromBase64String(savedPasswordHash);
+            /* Get the salt */
+            byte[] salt = new byte[16];
+            Array.Copy(hashBytes, 0, salt, 0, 16);
+            /* Compute the hash on the password the user entered */
+            var pbkdf2 = new Rfc2898DeriveBytes(password, salt, 10000);
+            byte[] hash = pbkdf2.GetBytes(20);
+            /* Compare the results */
+            for (int i = 0; i < 20; i++)
+                if (hashBytes[i + 16] != hash[i])
+                    return false;
+            return true;
         }
     }
 }
