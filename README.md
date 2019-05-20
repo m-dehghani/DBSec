@@ -1,2 +1,2 @@
 # DBSec
-secure sql server with certificates. The capability of using hardware security module also provided. 
+Secure dbs in sql servers with certificates. The capability of using hardware security modules also provided. 
