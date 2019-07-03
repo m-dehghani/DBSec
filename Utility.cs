@@ -17,7 +17,7 @@ namespace DBSec
     class Utility
     {
         public static SecureString passPhrase; /*= System.Text.Encoding.Unicode.GetBytes("Salt Is Not A Password");*/
-        public static SecureString PharmacyName;
+        public static SecureString PharmacySerial;
        
         
         public static string ftpAddress= "ftp://bastanisoft.ir/";
@@ -191,7 +191,18 @@ namespace DBSec
             catch(Exception ex)
             { return ex.Message; }
         }
-
+        public static string GetLocalIPAddress()
+        {
+            var host = Dns.GetHostEntry(Dns.GetHostName());
+            foreach (var ip in host.AddressList)
+            {
+                if (ip.AddressFamily == AddressFamily.InterNetwork)
+                {
+                    return ip.ToString();
+                }
+            }
+            throw new Exception("No network adapters with an IPv4 address in the system!");
+        }
         public static async Task<string> PutFileInFTP(string localFilePath, string password,string pharmacySerial, string address = "ftp://bastanisoft.ir/upload/", string userName = "Bastanis")
         {
 
